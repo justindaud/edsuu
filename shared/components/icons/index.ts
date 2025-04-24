@@ -1,0 +1,5 @@
+export { Edit } from './Edit'
+export { Search } from './Search'
+export { Upload } from './Upload'
+export { Trash2 } from './Trash2'
+export { X } from './X' 

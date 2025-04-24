@@ -1,0 +1,28 @@
+{
+    "name": "edsu-house-backend",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "nodemon --exec ts-node src/index.ts",
+        "build": "tsc",
+        "start": "node dist/index.js",
+        "init-admin": "ts-node scripts/init-admin.ts",
+        "create-user": "ts-node scripts/create-user.ts"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.1",
+        "express": "^5.1.0",
+        "mongoose": "^8.1.1"
+    },
+    "devDependencies": {
+        "@types/bcryptjs": "^2.4.6",
+        "@types/cors": "^2.8.17",
+        "@types/express": "^5.0.1",
+        "@types/node": "^20.11.19",
+        "nodemon": "^3.0.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.3.3"
+    }
+}

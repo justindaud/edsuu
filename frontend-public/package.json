@@ -1,0 +1,46 @@
+{
+  "name": "edsu-house-public",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 5000",
+    "build": "next build",
+    "start": "next start -p 5000",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.1.1",
+    "@hookform/resolvers": "^3.3.4",
+    "@types/nodemailer": "^6.4.17",
+    "@types/react-datepicker": "^7.0.0",
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.0.0",
+    "dotenv": "^16.4.1",
+    "edsu-house-shared": "file:../shared",
+    "lucide-react": "^0.488.0",
+    "next": "14.1.0",
+    "next-auth": "^4.24.11",
+    "nodemailer": "^6.10.0",
+    "react": "^18",
+    "react-datepicker": "^8.3.0",
+    "react-dom": "^18",
+    "react-hook-form": "^7.50.0",
+    "react-hot-toast": "^2.5.2",
+    "sharp": "^0.34.1",
+    "tailwind-merge": "^3.2.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@radix-ui/react-dialog": "1.1.10",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20",
+    "@types/react": "18.3.20",
+    "@types/react-dom": "18.3.6",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5"
+  }
+}
