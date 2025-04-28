@@ -20,6 +20,10 @@ const nextConfig = {
         destination: '/api/media/:path*'  // Keep media routes in frontend
       },
       {
+        source: '/api/merchandise/:path*',
+        destination: '/api/merchandise/:path*'  // Keep merchandise routes in frontend
+      },
+      {
         source: '/api/:path*',
         destination: 'http://localhost:5002/api/:path*'  // All other API routes to backend
       }

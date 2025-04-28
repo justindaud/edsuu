@@ -1,36 +1,56 @@
-import mongoose, { Document, Schema } from 'mongoose'
-import { IMedia } from './Media'
+import mongoose from 'mongoose'
 
-export interface IMerchandise extends Document {
+export interface IMerchandise extends mongoose.Document {
   name: string
-  image: IMedia
+  type?: 'image' | 'video'
+  url?: string
+  thumbnailUrl?: string
+  image?: string
   price: number
+  description?: string
+  isAvailable?: boolean
   createdAt: Date
   updatedAt: Date
 }
 
-const MerchandiseSchema = new Schema<IMerchandise>(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    image: {
-      type: Schema.Types.ObjectId,
-      ref: 'Media',
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-    },
+const merchandiseSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
   },
-  {
-    timestamps: true,
+  type: {
+    type: String,
+    enum: ['image', 'video'],
+    default: 'image',
+  },
+  url: {
+    type: String,
+    required: false,
+  },
+  thumbnailUrl: {
+    type: String,
+    required: false,
+  },
+  image: {
+    type: String,
+    required: false,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  description: {
+    type: String,
+    default: '',
+  },
+  isAvailable: {
+    type: Boolean,
+    default: true,
   }
-)
+}, {
+  timestamps: true,
+  collection: 'merchandises',
+})
 
-// Add index for name-based sorting
-MerchandiseSchema.index({ name: 1 })
+export const Merchandise = mongoose.models.Merchandise || mongoose.model<IMerchandise>('Merchandise', merchandiseSchema)
 
-export default mongoose.models.Merchandise || mongoose.model<IMerchandise>('Merchandise', MerchandiseSchema) 

@@ -8,6 +8,7 @@ import uploadRoutes from './uploadRoutes'
 import contactRoutes from './contactRoutes'
 import beEmRoutes from './beEmRoutes'
 import uiMediaRoutes from './uiMediaRoutes'
+import merchandiseRoutes from './merchandiseRoutes'
 
 const router = express.Router()
 
@@ -25,5 +26,5 @@ router.use('/auth', authRoutes)
 router.use('/users', userRoutes)
 router.use('/upload', uploadRoutes)
 router.use('/ui-media', uiMediaRoutes)
-
+router.use('/merchandise', merchandiseRoutes)
 export default router 

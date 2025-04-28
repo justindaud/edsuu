@@ -59,7 +59,7 @@ export default function UIMediaPage() {
 
   const fetchMedia = async () => {
     try {
-      const response = await fetch('/api/ui-media')
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/ui-media`)
       if (!response.ok) throw new Error('Failed to fetch media')
       const data = await response.json()
       setMedia(data)
@@ -160,7 +160,7 @@ export default function UIMediaPage() {
     if (!confirm('Are you sure you want to delete this media?')) return
 
     try {
-      const response = await fetch(`http://localhost:5002/api/ui-media/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/ui-media/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

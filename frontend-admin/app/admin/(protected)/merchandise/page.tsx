@@ -29,7 +29,7 @@ interface MerchandiseFormData {
     isAvailable: boolean
 }
 
-type SortField = 'name' | 'createdAt' | 'updatedAt'
+type SortField = 'name' | 'price' | 'createdAt' | 'updatedAt'
 type SortOrder = 'asc' | 'desc'
 
 
@@ -56,21 +56,25 @@ export default function MerchandisePage() {
   const [updating, setUpdating] = useState(false)
   
   useEffect(() => {
+    console.log('Effect running status:', status)
     if (status === 'unauthenticated') {
         router.push('/admin/login')
     } else if (status === 'authenticated') {
+        console.log('Start Fetching merchandise')
         fetchMerchandise()
     }
   }, [status, router])
 
   const fetchMerchandise = async () => {
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/merchandise`, {
+        console.log('Fetching merchandise')
+        const response = await fetch('/api/merchandise', {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${session?.user?.accessToken}`
             }
         })
+        console.log('Response:', response)
         if (!response.ok) throw new Error('Failed to fetch merchandise')
         const data = await response.json()
         setMerchandise(data)
@@ -104,17 +108,20 @@ export default function MerchandisePage() {
         formDataToSend.append('description', formData.description || '')
         formDataToSend.append('isAvailable', formData.isAvailable.toString())
 
-    const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}${selectedMerchandise ? `/api/merchandise/${selectedMerchandise._id}` : '/api/merchandise'}`, {
-            method: selectedMerchandise ? 'PUT' : 'POST',
-            headers: {
-                'Authorization': `Bearer ${session?.user?.accessToken}`
-            },
-            body: formDataToSend
-        }
-    )
+        const endpoint = selectedMerchandise 
+        ? `/api/merchandise/${selectedMerchandise._id}` 
+        : '/api/merchandise'
 
-    if (!response.ok) throw new Error(selectedMerchandise ? 'Failed to update merchandise' : 'Failed to create merchandise')
+        const response = await fetch(endpoint, {
+            method: selectedMerchandise ? 'PUT' : 'POST',
+            body: formDataToSend
+        })
+
+        if (!response.ok) {
+          const text = await response.text()
+          console.error('Response:', text)
+          throw new Error(selectedMerchandise ? 'Failed to update merchandise' : 'Failed to create merchandise')
+        }
 
     toast.success(selectedMerchandise ? 'Merchandise updated successfully' : 'Merchandise created successfully')
     setShowUploadModal(false)
@@ -126,6 +133,7 @@ export default function MerchandisePage() {
         toast.error(selectedMerchandise ? 'Failed to update merchandise' : 'Failed to create merchandise')
     } finally {
         setSaving(false)
+      }
     }
 
   const handleEdit = async (e: React.FormEvent) => {
@@ -134,6 +142,7 @@ export default function MerchandisePage() {
     setUpdating(true)
 
     try {
+        console.log(`Sending PATCH request to: /api/merchandise/${selectedMerchandise._id}`)
         const response = await fetch(`/api/merchandise/${selectedMerchandise._id}`, {
             method: 'PATCH',
             headers: {
@@ -148,7 +157,9 @@ export default function MerchandisePage() {
         })
 
         if (!response.ok) {
-            toast.error('Failed to update merchandise',{
+            const errorText = await response.text()
+            console.error(`Failed to update merchandise: ${response.status} ${errorText}`)
+            toast.error('Failed to update merchandise', {
                 duration: 3000,
                 position: 'top-center',
             })
@@ -191,11 +202,10 @@ export default function MerchandisePage() {
     if (!confirm('Are you sure you want to delete this item?')) return
 
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/merchandise/${id}`, {
+        const response = await fetch(`/api/merchandise/${id}`, {
             method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${session?.user?.accessToken}`
+                'Content-Type': 'application/json'
             }
         })
 
@@ -237,6 +247,11 @@ export default function MerchandisePage() {
       item.description?.toLowerCase().includes(searchQuery.toLowerCase())
     )
     .sort((a, b) => {
+      if (sortField === 'price') {
+        return sortOrder === 'asc' 
+          ? a.price - b.price
+          : b.price - a.price
+      }
       const aValue = a[sortField] || ''
       const bValue = b[sortField] || ''
       return sortOrder === 'asc' 
@@ -286,6 +301,7 @@ export default function MerchandisePage() {
             >
                 <option value="createdAt">Date Created</option>
                 <option value="name">Name</option>
+                <option value="price">Price</option>
                 <option value="updatedAt">Last Updated</option>
             </select>
             <Button
@@ -300,13 +316,13 @@ export default function MerchandisePage() {
           {filteredAndSortedMerchandise.map((item) => (
             <Card key={item._id} className="group relative overflow-hidden">
                 {/* Merchandise Preview */}
-
-              <div className="aspect-square relative cursor-pointer"
+              <div
+                className="aspect-square relative cursor-pointer"
                 onClick={() => setPreviewMerchandise(item)}
               >
                 <Image
                   src={item.thumbnailUrl}
-                  alt={item.name}
+                  alt={item.name || 'Merchandise'}
                   fill
                   className="object-cover transition-transform group-hover:scale-105"
                 />
@@ -317,7 +333,7 @@ export default function MerchandisePage() {
                     size="sm"
                     className="bg-white/90 hover:bg-white"
                     onClick={(e) => {
-                        e.preventDefault()
+                      e.stopPropagation()
                         openEditModal(item)
                     }}
                   >
@@ -328,7 +344,7 @@ export default function MerchandisePage() {
                     size="sm"
                     className="bg-white/90 hover:bg-white text-red-600 hover:text-red-700"
                     onClick={(e) => {
-                        e.preventDefault()
+                      e.stopPropagation()
                         handleDelete(item._id)
                     }}
                   >
@@ -342,20 +358,17 @@ export default function MerchandisePage() {
                 <Text variant="body" className="font-medium truncate">
                   {item.name}
                 </Text>
-                <Text variant="body" className="mb-2">
+                <Text variant="body" className="text-[#85BAAC] font-semibold">
                   Rp {item.price.toLocaleString('id-ID')}
                 </Text>
                 {item.description && (
-                  <Text variant="body" className="text-gray-600 mb-4">
+                  <Text variant="caption" className="text-gray-500 line-clamp-2">
                     {item.description}
                   </Text>
                 )}
-                {item.isAvailable && (
-                  <Text variant="body" className="text-gray-600 mb-4">
-                    Stock: {item.isAvailable ? 'Available' : 'Out of Stock'}
-                  </Text>
-                )}
-                
+                <Text variant="caption" className="text-gray-400">
+                  {new Date(item.createdAt).toLocaleDateString()}
+                </Text>
               </div>
             </Card>
           ))}
@@ -374,7 +387,7 @@ export default function MerchandisePage() {
           <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
             <div className="relative w-full h-full max-w-7xl max-h-[90vh]">
               <Image
-                src={previewMerchandise.thumbnailUrl}
+                src={previewMerchandise.url || previewMerchandise.thumbnailUrl}
                 alt={previewMerchandise.name}
                 fill
                 className="object-contain"
@@ -389,17 +402,12 @@ export default function MerchandisePage() {
                 <Text variant="heading" className="text-xl mb-2">
                   {previewMerchandise.name}
                 </Text>
-                <Text variant="body" className="mb-4">
+                <Text variant="body" className="text-[#85BAAC] font-semibold mb-2">
                   Rp {previewMerchandise.price.toLocaleString('id-ID')}
                 </Text>
                 {previewMerchandise.description && (
-                  <Text variant="body" className="mb-4">
+                  <Text variant="body" className="text-white/80">
                     {previewMerchandise.description}
-                  </Text>
-                )}
-                {previewMerchandise.isAvailable && (
-                  <Text variant="body" className="mb-4">
-                    Stock: {previewMerchandise.isAvailable ? 'Available' : 'Out of Stock'}
                   </Text>
                 )}
               </div>
@@ -437,7 +445,7 @@ export default function MerchandisePage() {
                       }
                     }}
                     className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
-                    accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/webm"
+                    accept="image/jpeg,image/png,image/gif,image/webp"
                     required
                   />
                 </div>
@@ -499,7 +507,7 @@ export default function MerchandisePage() {
                     <div>
                       <Text variant="body" className="mb-2">Stock</Text>
                       <select
-                        value={formData.isAvailable.toString() || 'true'}
+                        value={formData.isAvailable.toString()}
                         onChange={(e) => setFormData(prev => ({ ...prev, isAvailable: e.target.value === 'true' }))}
                         className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
                       >
@@ -508,20 +516,15 @@ export default function MerchandisePage() {
                       </select>
                     </div>
                   </div>
-
-                  <div className="space-y-4">
-                    <div>
-                      <Text variant="body" className="mb-2">Stock</Text>
-                    </div>
-                  </div>
                 </div>
-              </form>
-            </div>
+  
             <div className="flex justify-end gap-2">
               <Button
+                    type="button"
                 variant="outline"
                 onClick={() => {
-                  
+                      setShowUploadModal(false)
+                      setFormData({ name: '', price: 0, description: '', isAvailable: true })
                 }}
               >
                 Cancel
@@ -529,6 +532,8 @@ export default function MerchandisePage() {
               <Button type="submit" disabled={uploading}>
                 {uploading ? 'Uploading...' : 'Upload'}
               </Button>
+                </div>
+              </form>
             </div>
           </div>
         )}
@@ -563,8 +568,7 @@ export default function MerchandisePage() {
                       }
                     }}
                     className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
-                    accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/webm"
-                    required
+                    accept="image/jpeg,image/png,image/gif,image/webp"
                   />
                 </div>
 
@@ -579,7 +583,14 @@ export default function MerchandisePage() {
                         fill
                         className="object-contain"
                       />
-                    ) : null}
+                    ) : (
+                      <Image
+                        src={selectedMerchandise.thumbnailUrl}
+                        alt={selectedMerchandise.name}
+                        fill
+                        className="object-contain"
+                      />
+                    )}
                   </div>
                 </div>
 
@@ -621,7 +632,7 @@ export default function MerchandisePage() {
                     <div>
                       <Text variant="body" className="mb-2">Stock</Text>
                       <select
-                        value={formData.isAvailable.toString() || 'true'}
+                        value={formData.isAvailable.toString()}
                         onChange={(e) => setFormData(prev => ({ ...prev, isAvailable: e.target.value === 'true' }))}
                         className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
                       >
@@ -631,9 +642,10 @@ export default function MerchandisePage() {
                     </div>
                   </div>
                 </div>
-              </form>
+  
               <div className="flex justify-end gap-2">
                 <Button
+                    type="button"
                   variant="outline"
                   onClick={() => {
                     setShowEditModal(false)
@@ -647,9 +659,10 @@ export default function MerchandisePage() {
                   {updating ? 'Updating...' : 'Update'}
                 </Button>
               </div>
+              </form>
             </div>
           </div>
         )}
       </Container>
   )
-}}
+  }

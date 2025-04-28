@@ -35,6 +35,12 @@ const nextConfig = {
           source: '/fonts/:path*',
           destination: '/fonts/:path*',
         },
+        // Exclude NextAuth.js routes from being forwarded to the backend
+        {
+          source: '/api/auth/:path*',
+          destination: '/api/auth/:path*',
+        },
+        // Forward other API routes to the backend
         {
           source: '/api/:path*',
           destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/:path*`,

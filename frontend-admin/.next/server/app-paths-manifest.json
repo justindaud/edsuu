@@ -1,9 +1,6 @@
 {
   "/not-found": "app/not-found.js",
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/admin/(protected)/media/page": "app/admin/(protected)/media/page.js",
-  "/admin/(protected)/media-tbyt/page": "app/admin/(protected)/media-tbyt/page.js",
-  "/admin/(protected)/articles/page": "app/admin/(protected)/articles/page.js",
-  "/admin/(protected)/be-em/page": "app/admin/(protected)/be-em/page.js",
+  "/admin/(auth)/login/page": "app/admin/(auth)/login/page.js",
+  "/admin/(protected)/ui-media/page": "app/admin/(protected)/ui-media/page.js",
   "/admin/(protected)/merchandise/page": "app/admin/(protected)/merchandise/page.js"
 }

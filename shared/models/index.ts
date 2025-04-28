@@ -272,3 +272,31 @@ const uiMediaSchema = new mongoose.Schema({
 })
 
 export const UIMedia = mongoose.models.UIMedia || mongoose.model<IUIMedia>('UIMedia', uiMediaSchema) 
+
+export interface IMerchandise extends mongoose.Document {
+  name: string
+  image: IMedia
+  price: number
+  createdAt: Date
+  updatedAt: Date
+}
+
+const merchandiseSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  image: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Media',
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  }
+}, {
+  timestamps: true
+})
+
+export const Merchandise = mongoose.models.Merchandise || mongoose.model<IMerchandise>('Merchandise', merchandiseSchema)
