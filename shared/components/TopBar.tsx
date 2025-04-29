@@ -86,6 +86,7 @@ export default function TopBar() {
       href: activeProgram ? `/public/programs/${activeProgram.id}` : '/public/programs?public=true'
     },
     { label: 'TokoBuku YangTau', href: '/public/tokobuku' },
+    { label: 'Merchandise', href: '/public/merchandise' },
     { label: 'About', href: '/public/edsu-house' }
   ]
 

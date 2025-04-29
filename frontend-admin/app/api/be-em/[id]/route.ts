@@ -19,8 +19,27 @@ export async function GET(
 
     await connectToDatabase()
     const book = await BeEm.findById(params.id)
-      .populate('mediaId')
-      .populate('media')
+      .populate({
+        path: 'mediaId',
+        model: 'MediaTBYT',
+        select: '_id title url thumbnailUrl'
+      })
+      .populate({
+        path: 'media',
+        model: 'MediaTBYT',
+        select: '_id title url thumbnailUrl'
+      })
+      .populate({
+        path: 'relatedPrograms',
+        model: 'Program',
+        select: '_id title'
+      })
+      .populate({
+        path: 'relatedPartyLiterasi',
+        model: 'PartyLiterasi',
+        select: '_id title'
+      })
+      .lean()
 
     if (!book) {
       return NextResponse.json(
@@ -57,9 +76,35 @@ export async function PATCH(
 
     const book = await BeEm.findByIdAndUpdate(
       params.id,
-      data,
+      {
+        ...data,
+        price: data.price || 0,
+        year: data.year || new Date().getFullYear(),
+        isAvailable: data.isAvailable ?? true
+      },
       { new: true }
-    ).populate('mediaId').populate('media')
+    )
+      .populate({
+        path: 'mediaId',
+        model: 'MediaTBYT',
+        select: '_id title url thumbnailUrl'
+      })
+      .populate({
+        path: 'media',
+        model: 'MediaTBYT',
+        select: '_id title url thumbnailUrl'
+      })
+      .populate({
+        path: 'relatedPrograms',
+        model: 'Program',
+        select: '_id title'
+      })
+      .populate({
+        path: 'relatedPartyLiterasi',
+        model: 'PartyLiterasi',
+        select: '_id title'
+      })
+      .lean()
 
     if (!book) {
       return NextResponse.json(

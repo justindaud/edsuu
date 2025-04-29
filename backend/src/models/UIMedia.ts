@@ -7,6 +7,8 @@ export interface IUIMedia extends mongoose.Document {
   thumbnailUrl: string
   description: string
   isPublic: boolean
+  locationIds: string[]
+  index?: number
   createdAt: Date
   updatedAt: Date
 }
@@ -36,6 +38,15 @@ const uiMediaSchema = new mongoose.Schema({
   isPublic: {
     type: Boolean,
     default: true
+  },
+  locationIds: {
+    type: [String],
+    index: true,
+    default: []
+  },
+  index: {
+    type: Number,
+    default: 0
   }
 }, {
   timestamps: true,

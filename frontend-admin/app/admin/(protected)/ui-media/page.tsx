@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { Container, Grid, Text, Button, Card } from '@shared/components/ui'
 import { Upload, Search, Edit, Trash2, X } from '@shared/components/icons'
 import { toast } from 'react-hot-toast'
+import { uiMediaLocations, UIMediaLocationId } from '@shared/config/uiMediaLocations'
 
 interface Media {
   _id: string
@@ -16,6 +17,8 @@ interface Media {
   thumbnailUrl: string
   description: string
   isPublic: boolean
+  locationIds: string[]
+  index?: number
   createdAt: string
   updatedAt: string
 }
@@ -25,6 +28,8 @@ interface MediaFormData {
   title: string
   description: string
   isPublic: boolean
+  locationIds: string[]
+  index: number
 }
 
 type SortField = 'title' | 'createdAt' | 'updatedAt'
@@ -42,7 +47,9 @@ export default function UIMediaPage() {
   const [formData, setFormData] = useState<MediaFormData>({
     title: '',
     description: '',
-    isPublic: true
+    isPublic: true,
+    locationIds: [],
+    index: 0
   })
   const [searchQuery, setSearchQuery] = useState('')
   const [sortField, setSortField] = useState<SortField>('createdAt')
@@ -81,33 +88,53 @@ export default function UIMediaPage() {
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault()
+    
     if (!formData.file) return
-
-    setUploading(true)
-    const uploadData = new FormData()
-    uploadData.append('file', formData.file)
-    uploadData.append('title', formData.title)
-    uploadData.append('description', formData.description)
-    uploadData.append('isPublic', String(formData.isPublic))
-
+    
     try {
-      const response = await fetch('/api/ui-media/upload', {
-        method: 'POST',
-        body: uploadData,
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Upload failed')
+      setUploading(true)
+      
+      const formDataObj = new FormData()
+      formDataObj.append('file', formData.file)
+      formDataObj.append('title', formData.title)
+      formDataObj.append('description', formData.description)
+      formDataObj.append('isPublic', String(formData.isPublic))
+      
+      if (formData.locationIds.length > 0) {
+        formDataObj.append('locationIds', JSON.stringify(formData.locationIds))
       }
       
-      toast.success('File uploaded successfully')
-      fetchMedia()
+      formDataObj.append('index', String(formData.index))
+      
+      console.log('Uploading to Next.js API route: /api/ui-media/upload');
+      
+      const response = await fetch(
+        `/api/ui-media/upload`,
+        {
+          method: 'POST',
+          body: formDataObj
+        }
+      )
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Server response:', response.status, errorText);
+        throw new Error(`Failed to upload media: ${response.status} ${errorText}`);
+      }
+      
+      toast.success('Media uploaded successfully')
       setShowUploadModal(false)
-      setFormData({ title: '', description: '', isPublic: true })
+      setFormData({
+        title: '',
+        description: '',
+        isPublic: true,
+        locationIds: [],
+        index: 0
+      })
+      fetchMedia()
     } catch (error) {
-      console.error('Upload error:', error)
-      toast.error(error instanceof Error ? error.message : 'Failed to upload file')
+      console.error('Error uploading media:', error)
+      toast.error(error instanceof Error ? error.message : 'Failed to upload media')
     } finally {
       setUploading(false)
     }
@@ -116,43 +143,41 @@ export default function UIMediaPage() {
   const handleEdit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedMedia) return
-
+    
+    setUploading(true)
+    
     try {
-      const response = await fetch(`http://localhost:5002/api/ui-media/${selectedMedia._id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.user?.accessToken}`
-        },
-        body: JSON.stringify({
-          title: formData.title,
-          description: formData.description,
-          isPublic: formData.isPublic,
-        }),
-      })
-
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/ui-media/${selectedMedia._id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session?.user.accessToken}`
+          },
+          body: JSON.stringify({
+            title: formData.title,
+            description: formData.description,
+            isPublic: formData.isPublic,
+            locationIds: formData.locationIds,
+            index: formData.index
+          })
+        }
+      )
+      
       if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Failed to update media')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to update media')
       }
       
-      const updatedMedia = await response.json()
-      
-      setMedia(media.map(item => 
-        item._id === selectedMedia._id ? updatedMedia : item
-      ))
-      
-      toast.success('Media has been updated!')
+      toast.success('Media updated successfully')
       setShowEditModal(false)
-      setSelectedMedia(null)
-      setFormData({
-        title: '',
-        description: '',
-        isPublic: true
-      })
+      fetchMedia()
     } catch (error) {
-      console.error('Update error:', error)
+      console.error('Error updating media:', error)
       toast.error(error instanceof Error ? error.message : 'Failed to update media')
+    } finally {
+      setUploading(false)
     }
   }
 
@@ -186,7 +211,9 @@ export default function UIMediaPage() {
     setFormData({
       title: item.title || '',
       description: item.description || '',
-      isPublic: item.isPublic
+      isPublic: item.isPublic,
+      locationIds: item.locationIds || [],
+      index: item.index || 0
     })
     setShowEditModal(true)
   }
@@ -203,6 +230,24 @@ export default function UIMediaPage() {
         ? aValue.localeCompare(bValue)
         : bValue.localeCompare(aValue)
     })
+
+  const getLocationName = (locationId: string) => {
+    return uiMediaLocations[locationId as UIMediaLocationId]?.title || locationId
+  }
+
+  const handleLocationSelectionChange = (locationId: string, isChecked: boolean) => {
+    if (isChecked) {
+      setFormData(prev => ({
+        ...prev,
+        locationIds: [...prev.locationIds, locationId]
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        locationIds: prev.locationIds.filter(id => id !== locationId)
+      }));
+    }
+  };
 
   if (status === 'loading' || loading) {
     return (
@@ -314,6 +359,11 @@ export default function UIMediaPage() {
                 }`}>
                   {item.isPublic ? 'Public' : 'Private'}
                 </span>
+                {item.locationIds.length > 0 && (
+                  <span className="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
+                    {item.locationIds.map(getLocationName).join(', ')}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -337,7 +387,7 @@ export default function UIMediaPage() {
               <button
                 onClick={() => {
                   setShowUploadModal(false)
-                  setFormData({ title: '', description: '', isPublic: true })
+                  setFormData({ title: '', description: '', isPublic: true, locationIds: [], index: 0 })
                 }}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
@@ -415,6 +465,37 @@ export default function UIMediaPage() {
                     Make this media public
                   </label>
                 </div>
+                <div>
+                  <Text variant="body" className="mb-2 font-medium text-gray-700">Locations</Text>
+                  <div className="max-h-60 overflow-y-auto p-2 border border-gray-200 rounded-lg">
+                    {Object.entries(uiMediaLocations).map(([locationId, info]) => (
+                      <div key={`multi-${locationId}`} className="flex items-center py-1">
+                        <input
+                          type="checkbox"
+                          id={`location-${locationId}`}
+                          checked={formData.locationIds.includes(locationId)}
+                          onChange={(e) => handleLocationSelectionChange(locationId, e.target.checked)}
+                          className="h-4 w-4 text-[#85BAAC] focus:ring-[#85BAAC] border-gray-300 rounded"
+                        />
+                        <label htmlFor={`location-${locationId}`} className="ml-2 text-sm text-gray-700">
+                          {info.title}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {formData.locationIds.length > 0 && (
+                  <div>
+                    <Text variant="body" className="mb-2 font-medium text-gray-700">Index</Text>
+                    <input
+                      type="number"
+                      min="0"
+                      value={formData.index || 0}
+                      onChange={(e) => setFormData(prev => ({ ...prev, index: parseInt(e.target.value, 10) }))}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-end gap-2">
@@ -422,7 +503,7 @@ export default function UIMediaPage() {
                   variant="outline"
                   onClick={() => {
                     setShowUploadModal(false)
-                    setFormData({ title: '', description: '', isPublic: true })
+                    setFormData({ title: '', description: '', isPublic: true, locationIds: [], index: 0 })
                   }}
                   className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
                 >
@@ -451,7 +532,7 @@ export default function UIMediaPage() {
                 onClick={() => {
                   setShowEditModal(false)
                   setSelectedMedia(null)
-                  setFormData({ title: '', description: '', isPublic: true })
+                  setFormData({ title: '', description: '', isPublic: true, locationIds: [], index: 0 })
                 }}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
@@ -490,13 +571,44 @@ export default function UIMediaPage() {
                   Make this media public
                 </label>
               </div>
+              <div>
+                <Text variant="body" className="mb-2 font-medium text-gray-700">Locations</Text>
+                <div className="max-h-60 overflow-y-auto p-2 border border-gray-200 rounded-lg">
+                  {Object.entries(uiMediaLocations).map(([locationId, info]) => (
+                    <div key={`multi-${locationId}`} className="flex items-center py-1">
+                      <input
+                        type="checkbox"
+                        id={`edit-location-${locationId}`}
+                        checked={formData.locationIds.includes(locationId)}
+                        onChange={(e) => handleLocationSelectionChange(locationId, e.target.checked)}
+                        className="h-4 w-4 text-[#85BAAC] focus:ring-[#85BAAC] border-gray-300 rounded"
+                      />
+                      <label htmlFor={`edit-location-${locationId}`} className="ml-2 text-sm text-gray-700">
+                        {info.title}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {formData.locationIds.length > 0 && (
+                <div>
+                  <Text variant="body" className="mb-2 font-medium text-gray-700">Index</Text>
+                  <input
+                    type="number"
+                    min="0"
+                    value={formData.index || 0}
+                    onChange={(e) => setFormData(prev => ({ ...prev, index: parseInt(e.target.value, 10) }))}
+                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+                  />
+                </div>
+              )}
               <div className="flex justify-end gap-2">
                 <Button
                   variant="outline"
                   onClick={() => {
                     setShowEditModal(false)
                     setSelectedMedia(null)
-                    setFormData({ title: '', description: '', isPublic: true })
+                    setFormData({ title: '', description: '', isPublic: true, locationIds: [], index: 0 })
                   }}
                   className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
                 >

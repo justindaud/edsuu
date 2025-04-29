@@ -1,5 +1,7 @@
 import { Container, Grid, Text } from '../../../../shared/components/ui'
 import { ImageSlider } from '../../../../shared/components/ImageSlider'
+import { UIMedia } from '../../../../shared/components/UIMedia'
+import { UIMediaLocationId } from '../../../../shared/config/uiMediaLocations'
 
 async function getEdsuHouseContent() {
   // TODO: Implement API call to fetch EDSU House content
@@ -21,36 +23,43 @@ async function getEdsuHouseContent() {
         whiteSpace: {
           title: 'Th3 Whit3 5pac3',
           description: 'Ruang yang terang dan netral, memungkinkan interpretasi terbuka serta mendukung narasi multi-layered dalam karya seni',
-          media: ['/placeholder/white-space1.jpg', '/placeholder/white-space2.jpg']
+          media: ['/placeholder/white-space1.jpg', '/placeholder/white-space2.jpg'],
+          locationId: 'edsu.gallery.white-space.1' as UIMediaLocationId
         },
         blackBox: {
           title: 'Th3 Black Box',
           description: 'Ruang dramatis dengan pencahayaan terfokus untuk menciptakan pengalaman yang lebih mendalam dan introspektif bagi pengunjung',
-          media: ['/placeholder/black-box1.jpg', '/placeholder/black-box2.jpg']
+          media: ['/placeholder/black-box1.jpg', '/placeholder/black-box2.jpg'],
+          locationId: 'edsu.gallery.black-box.1' as UIMediaLocationId
         }
       },
       entrance: {
         title: 'Pintu Ma5uk Gal3ri',
         description: 'Pintu masuk EDSU House akan menjadi ekspresi artistik langsung dari Wawan Dalbo, seniman sekaligus pemilik galeri. Karya ini merefleksikan perjalanannya sebagai seniman dan arsitek. Terinspirasi dari karyanya Wrong Way (ArtJOG, 2024), Dalbo menggabungkan desain arsitektural dengan storytelling. Karyanya mengeksplorasi jalan hidup yang tak terduga, melambangkan keindahan dalam perjalanan yang penuh kejutan—sebuah narasi yang selaras dengan konsep pintu masuk galeri, tempat pengunjung memulai eksplorasi kreatif mereka.',
-        media: ['/placeholder/entrance1.jpg', '/placeholder/entrance2.jpg']
+        media: ['/placeholder/entrance1.jpg', '/placeholder/entrance2.jpg'],
+        locationId: 'edsu.entrance.1' as UIMediaLocationId
       },
       compound: {
         sections: [
           {
             title: 'Uttara th3 Icon',
-            media: ['/placeholder/uttara1.jpg', '/placeholder/uttara2.jpg']
+            media: ['/placeholder/uttara1.jpg', '/placeholder/uttara2.jpg'],
+            locationId: 'edsu.compound.uttara.1' as UIMediaLocationId
           },
           {
             title: 'Pulang k3 Uttara',
-            media: ['/placeholder/pulang1.jpg', '/placeholder/pulang2.jpg']
+            media: ['/placeholder/pulang1.jpg', '/placeholder/pulang2.jpg'],
+            locationId: 'edsu.compound.pulang.1' as UIMediaLocationId
           },
           {
             title: 'Omong-omong',
-            media: ['/placeholder/omong1.jpg', '/placeholder/omong2.jpg']
+            media: ['/placeholder/omong1.jpg', '/placeholder/omong2.jpg'],
+            locationId: 'edsu.compound.omong.1' as UIMediaLocationId
           },
           {
             title: '18+ Mu5ic Bar',
-            media: ['/placeholder/music1.jpg', '/placeholder/music2.jpg']
+            media: ['/placeholder/music1.jpg', '/placeholder/music2.jpg'],
+            locationId: 'edsu.compound.music.1' as UIMediaLocationId
           }
         ]
       },
@@ -69,6 +78,15 @@ export default async function EdsuHousePage() {
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <div className="h-[70vh] relative bg-[#85BAAC]">
+        <div className="absolute inset-0">
+          <UIMedia 
+            locationId="edsu.hero.1"
+            className="w-full h-full object-cover"
+            alt="EDSU House Hero"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#85BAAC]/80 to-transparent"></div>
+        </div>
         <div className="absolute inset-0 flex items-center">
           <Container>
             <Text variant="heading" className="text-[#EB008B] text-4xl mb-4 glitch-text animate-float">
@@ -102,7 +120,11 @@ export default async function EdsuHousePage() {
             {/* White Space */}
             <div className="space-y-6 hover-lift hover-glow animate-fadeIn">
               <div className="h-[50vh] relative overflow-hidden rounded-lg">
-                <ImageSlider images={content.sections.gallery.whiteSpace.media} />
+                <UIMedia 
+                  locationId={content.sections.gallery.whiteSpace.locationId}
+                  className="w-full h-full object-cover"
+                  alt={content.sections.gallery.whiteSpace.title}
+                />
                 <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent mix-blend-overlay"></div>
               </div>
               <Text variant="heading" className="text-2xl glitch-text">{content.sections.gallery.whiteSpace.title}</Text>
@@ -111,7 +133,11 @@ export default async function EdsuHousePage() {
             {/* Black Box */}
             <div className="space-y-6 hover-lift hover-glow animate-fadeIn delay-200">
               <div className="h-[50vh] relative overflow-hidden rounded-lg">
-                <ImageSlider images={content.sections.gallery.blackBox.media} />
+                <UIMedia 
+                  locationId={content.sections.gallery.blackBox.locationId}
+                  className="w-full h-full object-cover"
+                  alt={content.sections.gallery.blackBox.title}
+                />
                 <div className="absolute inset-0 bg-gradient-to-l from-black/10 to-transparent mix-blend-overlay"></div>
               </div>
               <Text variant="heading" className="text-2xl glitch-text">{content.sections.gallery.blackBox.title}</Text>
@@ -128,7 +154,11 @@ export default async function EdsuHousePage() {
           <Text variant="heading" className="text-4xl mb-12 glitch-text animate-float">{content.sections.entrance.title}</Text>
           <Grid cols={2} className="gap-8">
             <div className="h-[60vh] relative hover-lift hover-glow animate-fadeIn">
-              <ImageSlider images={content.sections.entrance.media} />
+              <UIMedia 
+                locationId={content.sections.entrance.locationId}
+                className="w-full h-full object-cover"
+                alt={content.sections.entrance.title}
+              />
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 mix-blend-overlay"></div>
             </div>
             <div className="space-y-6 flex flex-col justify-center animate-slideIn delay-200">
@@ -147,7 +177,11 @@ export default async function EdsuHousePage() {
             {content.sections.compound.sections.map((section, index) => (
               <div key={index} className="space-y-6 hover-lift hover-glow animate-fadeIn" style={{ animationDelay: `${index * 200}ms` }}>
                 <div className="h-[40vh] relative overflow-hidden rounded-lg">
-                  <ImageSlider images={section.media} />
+                  <UIMedia 
+                    locationId={section.locationId}
+                    className="w-full h-full object-cover"
+                    alt={section.title}
+                  />
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-transparent mix-blend-overlay"></div>
                 </div>
                 <Text variant="heading" className="text-2xl glitch-text">{section.title}</Text>

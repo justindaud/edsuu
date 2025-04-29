@@ -15,6 +15,16 @@ interface Media {
   thumbnailUrl: string
 }
 
+interface Program {
+  _id: string
+  title: string
+}
+
+interface PartyLiterasi {
+  _id: string
+  title: string
+}
+
 interface Book {
   _id: string
   title: string
@@ -25,6 +35,8 @@ interface Book {
   mediaId?: Media
   media?: Media[]
   isAvailable: boolean
+  relatedPrograms: string[]
+  relatedPartyLiterasi: string[]
 }
 
 interface BookFormData {
@@ -35,6 +47,8 @@ interface BookFormData {
   price: number
   media: Media[]
   isAvailable: boolean
+  relatedPrograms: string[]
+  relatedPartyLiterasi: string[]
 }
 
 const getMediaKey = (media: Media, prefix: string, index?: number) => {
@@ -46,6 +60,8 @@ export default function BeEmPage() {
   const router = useRouter()
 
   const [books, setBooks] = useState<Book[]>([])
+  const [programs, setPrograms] = useState<Program[]>([])
+  const [partyLiterasi, setPartyLiterasi] = useState<PartyLiterasi[]>([])
   const [availableMedia, setAvailableMedia] = useState<Media[]>([])
   const [showForm, setShowForm] = useState(false)
   const [showMediaModal, setShowMediaModal] = useState(false)
@@ -60,7 +76,9 @@ export default function BeEmPage() {
     author: '',
     price: 0,
     media: [],
-    isAvailable: true
+    isAvailable: true,
+    relatedPrograms: [],
+    relatedPartyLiterasi: []
   })
 
   useEffect(() => {
@@ -68,6 +86,8 @@ export default function BeEmPage() {
       router.push('/admin/login')
     } else if (status === 'authenticated') {
       fetchBooks()
+      fetchPrograms()
+      fetchPartyLiterasi()
     }
   }, [status, router])
 
@@ -84,6 +104,28 @@ export default function BeEmPage() {
       toast.error('Failed to load books')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchPrograms = async () => {
+    try {
+      const response = await fetch('/api/programs')
+      if (!response.ok) throw new Error('Failed to fetch programs')
+      const data = await response.json()
+      setPrograms(data)
+    } catch (error) {
+      console.error('Error fetching programs:', error)
+    }
+  }
+
+  const fetchPartyLiterasi = async () => {
+    try {
+      const response = await fetch('/api/party-literasi')
+      if (!response.ok) throw new Error('Failed to fetch party literasi')
+      const data = await response.json()
+      setPartyLiterasi(data)
+    } catch (error) {
+      console.error('Error fetching party literasi:', error)
     }
   }
 
@@ -154,7 +196,9 @@ export default function BeEmPage() {
       author: book.author,
       price: book.price,
       media: book.media || [],
-      isAvailable: book.isAvailable
+      isAvailable: book.isAvailable,
+      relatedPrograms: book.relatedPrograms,
+      relatedPartyLiterasi: book.relatedPartyLiterasi
     })
     setShowForm(true)
   }
@@ -193,7 +237,9 @@ export default function BeEmPage() {
             author: '',
             price: 0,
             media: [],
-            isAvailable: true
+            isAvailable: true,
+            relatedPrograms: [],
+            relatedPartyLiterasi: []
           })
           setShowForm(true)
         }}>
@@ -369,7 +415,6 @@ export default function BeEmPage() {
                       value={formData.author}
                       onChange={(e) => setFormData(prev => ({ ...prev, author: e.target.value }))}
                       className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
-                      required
                     />
                   </div>
                   <div>
@@ -379,7 +424,6 @@ export default function BeEmPage() {
                       value={formData.year}
                       onChange={(e) => setFormData(prev => ({ ...prev, year: parseInt(e.target.value) }))}
                       className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
-                      required
                     />
                   </div>
                 </div>
@@ -393,18 +437,56 @@ export default function BeEmPage() {
                       onChange={(e) => setFormData(prev => ({ ...prev, price: parseFloat(e.target.value) }))}
                       step="0.01"
                       className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
-                      required
                     />
                   </div>
                   <div>
                     <Text variant="body" className="mb-2">Availability</Text>
                     <select
-                      value={formData.isAvailable.toString()}
+                      value={(formData.isAvailable ?? true).toString()}
                       onChange={(e) => setFormData(prev => ({ ...prev, isAvailable: e.target.value === 'true' }))}
                       className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
                     >
                       <option value="true">Available</option>
                       <option value="false">Not Available</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Text variant="body" className="mb-2">Related Programs</Text>
+                    <select
+                      multiple
+                      value={formData.relatedPrograms}
+                      onChange={(e) => {
+                        const values = Array.from(e.target.selectedOptions, option => option.value)
+                        setFormData(prev => ({ ...prev, relatedPrograms: values }))
+                      }}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
+                    >
+                      {programs.map(program => (
+                        <option key={program._id} value={program._id}>
+                          {program.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <Text variant="body" className="mb-2">Related Party Literasi</Text>
+                    <select
+                      multiple
+                      value={formData.relatedPartyLiterasi}
+                      onChange={(e) => {
+                        const values = Array.from(e.target.selectedOptions, option => option.value)
+                        setFormData(prev => ({ ...prev, relatedPartyLiterasi: values }))
+                      }}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
+                    >
+                      {partyLiterasi.map(party => (
+                        <option key={party._id} value={party._id}>
+                          {party.title}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>

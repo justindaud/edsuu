@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { Text } from '../components/ui'
 import GreenLogo from '../logo/EDSU_Asset_Logo_Green.png'
 import PinkLogo from '../logo/EDSU_Asset_Logo_Pink.png'
+import { UIMedia } from './UIMedia'
+import { UIMediaLocationId } from '../config/uiMediaLocations'
 
 const logos = [
   GreenLogo,
@@ -19,6 +21,7 @@ interface HeroSection {
   images: string[]
   link: string
   text?: string
+  locationId?: string
 }
 
 interface HeroSlideshowProps {
@@ -252,17 +255,30 @@ export function HeroSlideshow({ sections }: HeroSlideshowProps) {
               ${index < activeSection ? '-translate-x-full' : ''}
             `}
           >
-            {/* Background Image */}
+            {/* Background Image - Either UIMedia or Image */}
             <div className="absolute inset-0">
-              <Image
-                src={section.images[activeImage]}
-                alt={section.title}
-                fill
-                className={`object-cover transition-opacity ${isManualNavigation ? 'duration-300' : 'duration-500'}
-                  ${isTransitioning ? 'opacity-0' : 'opacity-100'}
-                `}
-                priority
-              />
+              {section.locationId ? (
+                <UIMedia
+                  locationId={section.locationId as UIMediaLocationId}
+                  alt={section.title}
+                  width={1920}
+                  height={1080}
+                  className={`object-cover w-full h-full transition-opacity ${isManualNavigation ? 'duration-300' : 'duration-500'}
+                    ${isTransitioning ? 'opacity-0' : 'opacity-100'}
+                  `}
+                  priority={index === activeSection}
+                />
+              ) : (
+                <Image
+                  src={section.images[activeImage]}
+                  alt={section.title}
+                  fill
+                  className={`object-cover transition-opacity ${isManualNavigation ? 'duration-300' : 'duration-500'}
+                    ${isTransitioning ? 'opacity-0' : 'opacity-100'}
+                  `}
+                  priority
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent" />
             </div>
 

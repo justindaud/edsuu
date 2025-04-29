@@ -13,9 +13,10 @@ import {
 import { HeroSlideshow } from '../../shared/components/HeroSlideshow'
 import { ContactForm } from '../../shared/components/ContactForm'
 import { LoadingScreen } from '../../shared/components/LoadingScreen'
+import { UIMedia } from '../../shared/components/UIMedia'
 
 // This allows the page to be dynamic and fetch fresh data on each request
-export const revalidate = 0
+// export const revalidate = 0
 
 interface Program {
   id: string
@@ -35,6 +36,7 @@ interface HeroSection {
   images: string[]
   link: string
   text?: string
+  locationId?: string
 }
 
 const getActiveProgram = async (): Promise<Program | null> => {
@@ -81,21 +83,24 @@ const staticSections: HeroSection[] = [
     title: '3D5U hou53',
     description: 'Experience contemporary art in a historical setting',
     images: ['/images/placeholder/edsu1.jpg'],
-    link: '/public/edsu-house'
+    link: '/public/edsu-house',
+    locationId: 'home.hero.edsu'
   },
   {
     id: 'tokobuku',
     title: 'ToKo8uKu Y6n9T6u',
     description: 'Explore our curated collection of books',
     images: ['/images/placeholder/book1.jpg'],
-    link: '/public/tokobuku'
+    link: '/public/tokobuku',
+    locationId: 'home.hero.tokobuku'
   },
   {
     id: 'merchandise',
     title: 'M3rchandi53',
     description: 'Take home a piece of EDSU House',
     images: ['/images/placeholder/merch1.jpg'],
-    link: '/public/merchandise'
+    link: '/public/merchandise',
+    locationId: 'home.hero.merchandise'
   }
 ]
 
@@ -128,13 +133,13 @@ export default function Home() {
         
         // Combine the active program with static sections
         const sections = [
-          // Active program section if exists
+          // Active program section if exists - keep this dynamic without locationId
           activeProgram ? {
             id: activeProgram.id,
             title: activeProgram.title,
             description: activeProgram.description,
             images: activeProgram.media.map(m => m.url),
-            link: `/public/programs/${activeProgram.id}`,
+            link: `/public/programs/${activeProgram.id}`
           } : {
             id: 'no-program',
             title: 'Program',

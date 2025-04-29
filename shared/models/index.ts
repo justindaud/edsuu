@@ -145,11 +145,36 @@ export interface IBeEm extends mongoose.Document {
   title: string
   author: string
   description: string
+  year: number
+  price: number
   mediaId: mongoose.Types.ObjectId
   media: mongoose.Types.ObjectId[]
+  reviews: {
+    reviewer: string
+    text: string
+    createdAt: Date
+  }[]
+  isAvailable: boolean
+  relatedPrograms: mongoose.Types.ObjectId[]
+  relatedPartyLiterasi: mongoose.Types.ObjectId[]
   createdAt: Date
   updatedAt: Date
 }
+
+const ReviewSchema = new mongoose.Schema({
+  reviewer: {
+    type: String,
+    required: true
+  },
+  text: {
+    type: String,
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+})
 
 const beEmSchema = new mongoose.Schema({
   title: {
@@ -164,21 +189,51 @@ const beEmSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  year: {
+    type: Number,
+    required: true,
+    default: new Date().getFullYear()
+  },
+  price: {
+    type: Number,
+    default: 0
+  },
   mediaId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Media',
+    ref: 'MediaTBYT',
     required: true
   },
   media: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Media'
+    ref: 'MediaTBYT'
+  }],
+  reviews: {
+    type: [ReviewSchema],
+    default: []
+  },
+  isAvailable: {
+    type: Boolean,
+    default: true
+  },
+  relatedPrograms: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Program'
+  }],
+  relatedPartyLiterasi: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'PartyLiterasi'
   }]
 }, {
   timestamps: true,
-  collection: 'beems'
+  collection: 'beems',
+  strictPopulate: false
 })
 
-export const BeEm = mongoose.models.BeEm || mongoose.model<IBeEm>('BeEm', beEmSchema)
+if (mongoose.models.BeEm) {
+  delete mongoose.models.BeEm
+}
+
+export const BeEm = mongoose.model<IBeEm>('BeEm', beEmSchema)
 
 export interface IPartyLiterasi extends mongoose.Document {
   title: string
@@ -236,6 +291,9 @@ export interface IUIMedia extends mongoose.Document {
   thumbnailUrl: string
   description: string
   isPublic: boolean
+  locationIds?: string[]
+  locationId?: string
+  index?: number
   createdAt: Date
   updatedAt: Date
 }
@@ -265,13 +323,26 @@ const uiMediaSchema = new mongoose.Schema({
   isPublic: {
     type: Boolean,
     default: true
+  },
+  locationIds: {
+    type: [String],
+    index: true,
+    default: []
+  },
+  locationId: {
+    type: String,
+    index: true
+  },
+  index: {
+    type: Number,
+    default: 0
   }
 }, {
   timestamps: true,
   collection: 'uimedia'
 })
 
-export const UIMedia = mongoose.models.UIMedia || mongoose.model<IUIMedia>('UIMedia', uiMediaSchema) 
+export const UIMedia = mongoose.models.UIMedia || mongoose.model<IUIMedia>('UIMedia', uiMediaSchema)
 
 export interface IMerchandise extends mongoose.Document {
   name: string
@@ -300,3 +371,5 @@ const merchandiseSchema = new mongoose.Schema({
 })
 
 export const Merchandise = mongoose.models.Merchandise || mongoose.model<IMerchandise>('Merchandise', merchandiseSchema)
+
+export * from './Visitor'

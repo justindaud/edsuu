@@ -1,6 +1,6 @@
 {
   "/not-found": "app/not-found.js",
-  "/admin/(auth)/login/page": "app/admin/(auth)/login/page.js",
-  "/admin/(protected)/ui-media/page": "app/admin/(protected)/ui-media/page.js",
-  "/admin/(protected)/merchandise/page": "app/admin/(protected)/merchandise/page.js"
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/visitors/route": "app/api/visitors/route.js",
+  "/admin/(protected)/visitors/page": "app/admin/(protected)/visitors/page.js"
 }

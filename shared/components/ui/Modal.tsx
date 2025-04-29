@@ -1,6 +1,6 @@
 "use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from " @/shared/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./dialog";
 
 interface ModalProps {
   isOpen: boolean;
