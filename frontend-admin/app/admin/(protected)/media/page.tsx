@@ -490,6 +490,7 @@ export default function MediaPage() {
                       onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                       className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
                       rows={3}
+                      required
                     />
                   </div>
                 </div>

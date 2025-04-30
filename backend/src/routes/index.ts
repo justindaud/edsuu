@@ -9,6 +9,7 @@ import contactRoutes from './contactRoutes'
 import beEmRoutes from './beEmRoutes'
 import uiMediaRoutes from './uiMediaRoutes'
 import merchandiseRoutes from './merchandiseRoutes'
+import mediaTBYTRoutes from './mediaTBYTRoutes'
 
 const router = express.Router()
 
@@ -18,6 +19,7 @@ router.use('/articles', articleRoutes)
 router.use('/media', mediaRoutes)
 router.use('/contact', contactRoutes)
 router.use('/be-em', beEmRoutes)
+router.use('/media-tbyt', mediaTBYTRoutes)
 
 // Auth routes
 router.use('/auth', authRoutes)
