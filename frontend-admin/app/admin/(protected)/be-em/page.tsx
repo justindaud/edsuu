@@ -25,6 +25,12 @@ interface PartyLiterasi {
   title: string
 }
 
+interface Review {
+  reviewer: string
+  text: string
+  createdAt?: string
+}
+
 interface Book {
   _id: string
   title: string
@@ -37,6 +43,7 @@ interface Book {
   isAvailable: boolean
   relatedPrograms: string[]
   relatedPartyLiterasi: string[]
+  reviews: Review[]
 }
 
 interface BookFormData {
@@ -49,6 +56,7 @@ interface BookFormData {
   isAvailable: boolean
   relatedPrograms: string[]
   relatedPartyLiterasi: string[]
+  reviews: Review[]
 }
 
 const getMediaKey = (media: Media, prefix: string, index?: number) => {
@@ -78,7 +86,8 @@ export default function BeEmPage() {
     media: [],
     isAvailable: true,
     relatedPrograms: [],
-    relatedPartyLiterasi: []
+    relatedPartyLiterasi: [],
+    reviews: []
   })
 
   useEffect(() => {
@@ -93,19 +102,43 @@ export default function BeEmPage() {
 
   const fetchBooks = async () => {
     try {
-      const response = await fetch('/api/be-em')
-      if (!response.ok) throw new Error('Failed to fetch books')
-      const data = await response.json()
-      console.log('Fetched books data:', data)
-      console.log('First book media data:', data[0]?.mediaId, data[0]?.media)
-      setBooks(data)
+      // First fetch books
+      const booksResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/be-em`, {
+        headers: {
+          'Authorization': `Bearer ${session?.user?.accessToken}`
+        }
+      });
+      
+      if (!booksResponse.ok) throw new Error('Failed to fetch books');
+      const booksData = await booksResponse.json();
+      
+      // Then fetch media
+      const mediaResponse = await fetch('/api/media-tbyt');
+      if (!mediaResponse.ok) throw new Error('Failed to fetch media');
+      const mediaData: Media[] = await mediaResponse.json();
+      
+      // Create a map of media by ID for quick lookup
+      const mediaMap: Record<string, Media> = mediaData.reduce((acc: Record<string, Media>, media: Media) => {
+        acc[media._id] = media;
+        return acc;
+      }, {});
+      
+      // Combine book data with media
+      const enrichedBooks = booksData.map((book: any) => ({
+        ...book,
+        mediaId: book.mediaId ? mediaMap[book.mediaId] : undefined,
+        media: (book.media || []).map((id: string) => mediaMap[id]).filter(Boolean),
+      }));
+      
+      setBooks(enrichedBooks);
+      setAvailableMedia(mediaData);
     } catch (error) {
-      console.error('Error fetching books:', error)
-      toast.error('Failed to load books')
+      console.error('Error fetching books:', error);
+      toast.error('Failed to load books');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const fetchPrograms = async () => {
     try {
@@ -129,29 +162,30 @@ export default function BeEmPage() {
     }
   }
 
-  const fetchAvailableMedia = async () => {
-    try {
-      const response = await fetch('/api/media')
-      if (!response.ok) throw new Error('Failed to fetch media')
-      const data = await response.json()
-      setAvailableMedia(data)
-    } catch (error) {
-      console.error('Error fetching media:', error)
-      toast.error('Failed to load media')
-    }
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
 
     try {
+      // Prepare data with mediaId from the first media item if available
+      const dataToSubmit = {
+        ...formData,
+        mediaId: formData.media.length > 0 ? formData.media[0]._id : null,
+        // Send only the IDs of the media items
+        media: formData.media.map(m => m._id)
+      };
+
       const response = await fetch(
-        selectedBook ? `/api/be-em/${selectedBook._id}` : '/api/be-em',
+        selectedBook 
+          ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/be-em/${selectedBook._id}` 
+          : `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/be-em`,
         {
-          method: selectedBook ? 'PATCH' : 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
+          method: selectedBook ? 'PUT' : 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session?.user?.accessToken}`
+          },
+          body: JSON.stringify(dataToSubmit),
         }
       )
 
@@ -173,8 +207,11 @@ export default function BeEmPage() {
     if (!confirm('Are you sure you want to delete this book?')) return
 
     try {
-      const response = await fetch(`/api/be-em/${bookId}`, {
-        method: 'DELETE'
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/be-em/${bookId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${session?.user?.accessToken}`
+        }
       })
 
       if (!response.ok) throw new Error('Failed to delete book')
@@ -189,18 +226,40 @@ export default function BeEmPage() {
 
   const handleEdit = (book: Book) => {
     setSelectedBook(book)
+    
+    // Create a proper media array from available data
+    let mediaItems: Media[] = [];
+    
+    // Add mediaId object if it exists
+    if (book.mediaId && typeof book.mediaId === 'object') {
+      mediaItems.push(book.mediaId);
+    }
+    
+    // Add media array items if they exist
+    if (book.media && Array.isArray(book.media)) {
+      // Filter out any duplicates that might be in mediaId already
+      const mediaIdToExclude = book.mediaId?._id;
+      const additionalMedia = mediaIdToExclude 
+        ? book.media.filter(m => m._id !== mediaIdToExclude)
+        : book.media;
+        
+      mediaItems = [...mediaItems, ...additionalMedia];
+    }
+    
     setFormData({
       title: book.title,
       description: book.description,
       year: book.year,
       author: book.author,
       price: book.price,
-      media: book.media || [],
+      media: mediaItems,
       isAvailable: book.isAvailable,
       relatedPrograms: book.relatedPrograms,
-      relatedPartyLiterasi: book.relatedPartyLiterasi
-    })
-    setShowForm(true)
+      relatedPartyLiterasi: book.relatedPartyLiterasi,
+      reviews: book.reviews || []
+    });
+    
+    setShowForm(true);
   }
 
   const handleMediaSelect = (media: Media) => {
@@ -239,7 +298,8 @@ export default function BeEmPage() {
             media: [],
             isAvailable: true,
             relatedPrograms: [],
-            relatedPartyLiterasi: []
+            relatedPartyLiterasi: [],
+            reviews: []
           })
           setShowForm(true)
         }}>
@@ -259,14 +319,14 @@ export default function BeEmPage() {
         {filteredBooks.map(book => (
           <Card key={book._id} className="overflow-hidden">
             <div className="relative h-[200px] w-full">
-              {book.mediaId ? (
+              {book.mediaId && typeof book.mediaId === 'object' ? (
                 <Image
                   src={book.mediaId.thumbnailUrl || book.mediaId.url}
                   alt={book.title}
                   fill
                   className="object-cover"
                 />
-              ) : book.media && book.media.length > 0 ? (
+              ) : book.media && book.media.length > 0 && typeof book.media[0] === 'object' ? (
                 <Image
                   src={book.media[0].thumbnailUrl || book.media[0].url}
                   alt={book.title}
@@ -341,7 +401,7 @@ export default function BeEmPage() {
                       type="button"
                       variant="outline"
                       onClick={() => {
-                        fetchAvailableMedia()
+                        fetchBooks()
                         setShowMediaModal(true)
                       }}
                     >
@@ -455,40 +515,134 @@ export default function BeEmPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Text variant="body" className="mb-2">Related Programs</Text>
-                    <select
-                      multiple
-                      value={formData.relatedPrograms}
-                      onChange={(e) => {
-                        const values = Array.from(e.target.selectedOptions, option => option.value)
-                        setFormData(prev => ({ ...prev, relatedPrograms: values }))
-                      }}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
-                    >
+                    <div className="border border-gray-200 rounded-lg p-3 max-h-[200px] overflow-y-auto">
                       {programs.map(program => (
-                        <option key={program._id} value={program._id}>
-                          {program.title}
-                        </option>
+                        <div key={program._id} className="mb-2 flex items-center">
+                          <input
+                            type="checkbox"
+                            id={`program-${program._id}`}
+                            checked={formData.relatedPrograms.includes(program._id)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setFormData(prev => ({
+                                  ...prev,
+                                  relatedPrograms: [...prev.relatedPrograms, program._id]
+                                }));
+                              } else {
+                                setFormData(prev => ({
+                                  ...prev,
+                                  relatedPrograms: prev.relatedPrograms.filter(id => id !== program._id)
+                                }));
+                              }
+                            }}
+                            className="mr-2"
+                          />
+                          <label htmlFor={`program-${program._id}`} className="text-sm">
+                            {program.title}
+                          </label>
+                        </div>
                       ))}
-                    </select>
+                    </div>
                   </div>
                   <div>
                     <Text variant="body" className="mb-2">Related Party Literasi</Text>
-                    <select
-                      multiple
-                      value={formData.relatedPartyLiterasi}
-                      onChange={(e) => {
-                        const values = Array.from(e.target.selectedOptions, option => option.value)
-                        setFormData(prev => ({ ...prev, relatedPartyLiterasi: values }))
-                      }}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
-                    >
+                    <div className="border border-gray-200 rounded-lg p-3 max-h-[200px] overflow-y-auto">
                       {partyLiterasi.map(party => (
-                        <option key={party._id} value={party._id}>
-                          {party.title}
-                        </option>
+                        <div key={party._id} className="mb-2 flex items-center">
+                          <input
+                            type="checkbox"
+                            id={`party-${party._id}`}
+                            checked={formData.relatedPartyLiterasi.includes(party._id)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setFormData(prev => ({
+                                  ...prev,
+                                  relatedPartyLiterasi: [...prev.relatedPartyLiterasi, party._id]
+                                }));
+                              } else {
+                                setFormData(prev => ({
+                                  ...prev,
+                                  relatedPartyLiterasi: prev.relatedPartyLiterasi.filter(id => id !== party._id)
+                                }));
+                              }
+                            }}
+                            className="mr-2"
+                          />
+                          <label htmlFor={`party-${party._id}`} className="text-sm">
+                            {party.title}
+                          </label>
+                        </div>
                       ))}
-                    </select>
+                    </div>
                   </div>
+                </div>
+
+                {/* Add Reviews Section */}
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <Text variant="body">Reviews</Text>
+                    <Button 
+                      type="button" 
+                      variant="outline"
+                      onClick={() => setFormData(prev => ({
+                        ...prev, 
+                        reviews: [...(prev.reviews || []), { reviewer: '', text: '' }]
+                      }))}
+                    >
+                      Add Review
+                    </Button>
+                  </div>
+                  
+                  {(formData.reviews || []).map((review, index) => (
+                    <div key={index} className="mb-4 p-4 border border-gray-200 rounded-lg relative">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData(prev => ({
+                            ...prev,
+                            reviews: prev.reviews.filter((_, i) => i !== index)
+                          }))
+                        }}
+                        className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
+                      >
+                        ×
+                      </button>
+                      
+                      <div className="mb-3">
+                        <Text variant="body" className="mb-1">Reviewer</Text>
+                        <input
+                          type="text"
+                          value={review.reviewer}
+                          onChange={(e) => {
+                            const updatedReviews = [...formData.reviews];
+                            updatedReviews[index] = {
+                              ...updatedReviews[index],
+                              reviewer: e.target.value
+                            };
+                            setFormData(prev => ({ ...prev, reviews: updatedReviews }));
+                          }}
+                          className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Text variant="body" className="mb-1">Review Text</Text>
+                        <textarea
+                          value={review.text}
+                          onChange={(e) => {
+                            const updatedReviews = [...formData.reviews];
+                            updatedReviews[index] = {
+                              ...updatedReviews[index],
+                              text: e.target.value
+                            };
+                            setFormData(prev => ({ ...prev, reviews: updatedReviews }));
+                          }}
+                          rows={3}
+                          className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-edsu-green"
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 <div className="flex justify-end space-x-4">

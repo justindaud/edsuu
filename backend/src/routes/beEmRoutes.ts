@@ -8,9 +8,6 @@ const router = express.Router()
 const getAllBeEm: RequestHandler = async (req, res, next): Promise<void> => {
   try {
     const items = await BeEm.find()
-      .populate('media')
-      .populate('relatedPrograms')
-      .populate('relatedPartyLiterasi')
       .sort({ createdAt: -1 })
       .exec()
     res.json(items)
@@ -24,10 +21,6 @@ const getAllBeEm: RequestHandler = async (req, res, next): Promise<void> => {
 const getBeEmById: RequestHandler = async (req, res, next): Promise<void> => {
   try {
     const item = await BeEm.findById(req.params.id)
-      .populate('media')
-      .populate('relatedPrograms')
-      .populate('relatedPartyLiterasi')
-      .exec()
     if (!item) {
       res.status(404).json({ error: 'BE-EM item not found' })
       return
@@ -58,10 +51,6 @@ const updateBeEm: RequestHandler = async (req, res, next): Promise<void> => {
       { ...req.body, updatedAt: new Date() },
       { new: true, runValidators: true }
     )
-      .populate('media')
-      .populate('relatedPrograms')
-      .populate('relatedPartyLiterasi')
-      .exec()
 
     if (!item) {
       res.status(404).json({ error: 'BE-EM item not found' })

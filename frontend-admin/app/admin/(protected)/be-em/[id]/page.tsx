@@ -178,7 +178,7 @@ export default function BookEditPage() {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}${isNew ? '/api/be-em' : `/api/be-em/${params.id}`}`,
         {
-          method: isNew ? 'POST' : 'PUT',
+          method: isNew ? 'POST' : 'PATCH',
           headers: { 
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${session?.user?.accessToken}`
@@ -417,39 +417,65 @@ export default function BookEditPage() {
         <Grid cols={2} gap="md">
           <div>
             <Text variant="body" className="mb-2">Related Programs</Text>
-            <select
-              multiple
-              value={formData.relatedPrograms}
-              onChange={(e) => {
-                const values = Array.from(e.target.selectedOptions, option => option.value)
-                setFormData(prev => ({ ...prev, relatedPrograms: values }))
-              }}
-              className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
-            >
+            <div className="border border-gray-200 rounded-lg p-3 max-h-[200px] overflow-y-auto">
               {programs.map(program => (
-                <option key={program._id} value={program._id}>
-                  {program.title}
-                </option>
+                <div key={program._id} className="mb-2 flex items-center">
+                  <input
+                    type="checkbox"
+                    id={`program-${program._id}`}
+                    checked={formData.relatedPrograms.includes(program._id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setFormData(prev => ({
+                          ...prev,
+                          relatedPrograms: [...prev.relatedPrograms, program._id]
+                        }));
+                      } else {
+                        setFormData(prev => ({
+                          ...prev,
+                          relatedPrograms: prev.relatedPrograms.filter(id => id !== program._id)
+                        }));
+                      }
+                    }}
+                    className="mr-2"
+                  />
+                  <label htmlFor={`program-${program._id}`} className="text-sm">
+                    {program.title}
+                  </label>
+                </div>
               ))}
-            </select>
+            </div>
           </div>
           <div>
             <Text variant="body" className="mb-2">Related Party Literasi</Text>
-            <select
-              multiple
-              value={formData.relatedPartyLiterasi}
-              onChange={(e) => {
-                const values = Array.from(e.target.selectedOptions, option => option.value)
-                setFormData(prev => ({ ...prev, relatedPartyLiterasi: values }))
-              }}
-              className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
-            >
+            <div className="border border-gray-200 rounded-lg p-3 max-h-[200px] overflow-y-auto">
               {partyLiterasi.map(party => (
-                <option key={party._id} value={party._id}>
-                  {party.title}
-                </option>
+                <div key={party._id} className="mb-2 flex items-center">
+                  <input
+                    type="checkbox"
+                    id={`party-${party._id}`}
+                    checked={formData.relatedPartyLiterasi.includes(party._id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setFormData(prev => ({
+                          ...prev,
+                          relatedPartyLiterasi: [...prev.relatedPartyLiterasi, party._id]
+                        }));
+                      } else {
+                        setFormData(prev => ({
+                          ...prev,
+                          relatedPartyLiterasi: prev.relatedPartyLiterasi.filter(id => id !== party._id)
+                        }));
+                      }
+                    }}
+                    className="mr-2"
+                  />
+                  <label htmlFor={`party-${party._id}`} className="text-sm">
+                    {party.title}
+                  </label>
+                </div>
               ))}
-            </select>
+            </div>
           </div>
         </Grid>
 

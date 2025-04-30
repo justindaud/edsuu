@@ -81,7 +81,7 @@ const staticSections: HeroSection[] = [
   {
     id: 'edsu-house',
     title: '3D5U hou53',
-    description: 'Experience contemporary art in a historical setting',
+    description: 'tentang kami, mereka, dan kita',
     images: ['/images/placeholder/edsu1.jpg'],
     link: '/public/edsu-house',
     locationId: 'home.hero.edsu'
@@ -89,7 +89,7 @@ const staticSections: HeroSection[] = [
   {
     id: 'tokobuku',
     title: 'ToKo8uKu Y6n9T6u',
-    description: 'Explore our curated collection of books',
+    description: 'kunjungi toko buku',
     images: ['/images/placeholder/book1.jpg'],
     link: '/public/tokobuku',
     locationId: 'home.hero.tokobuku'
@@ -97,7 +97,7 @@ const staticSections: HeroSection[] = [
   {
     id: 'merchandise',
     title: 'M3rchandi53',
-    description: 'Take home a piece of EDSU House',
+    description: 'untuk dibawa pulang dan dikenang',
     images: ['/images/placeholder/merch1.jpg'],
     link: '/public/merchandise',
     locationId: 'home.hero.merchandise'
@@ -137,13 +137,13 @@ export default function Home() {
           activeProgram ? {
             id: activeProgram.id,
             title: activeProgram.title,
-            description: activeProgram.description,
+            description: "Kunjungi Program",
             images: activeProgram.media.map(m => m.url),
             link: `/public/programs/${activeProgram.id}`
           } : {
             id: 'no-program',
             title: 'Program',
-            description: '',
+            description: 'Kunjungi Program',
             images: ['/placeholder/program1.jpg'],
             link: '/public/programs/${activeProgram.id}',
             text: ""
@@ -159,8 +159,8 @@ export default function Home() {
         setHeroSections([
           {
             id: 'no-program',
-            title: 'Program-program Edsu house',
-            description: 'Lihat semua program kami',
+            title: 'Program',
+            description: 'Kunjungi Program',
             images: ['/placeholder/program1.jpg'],
             link: '/public/programs',
             text: "Lihat seluruh program"

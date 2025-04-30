@@ -90,7 +90,7 @@ export function UIMedia({
   // Show the media from the database
   return (
     <Image
-      src={media.thumbnailUrl || media.url}
+      src={media.url}
       alt={alt || media.title || locationConfig?.title || 'UI Media'}
       className={className}
       width={width}

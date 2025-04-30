@@ -16,15 +16,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/admin/(protected)/layout.js"
     ],
-    "/admin/(protected)/visitors/page": [
+    "/admin/(protected)/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/(protected)/visitors/page.js"
+      "static/chunks/app/admin/(protected)/dashboard/page.js"
     ],
-    "/not-found": [
+    "/admin/(protected)/ui-media/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/not-found.js"
+      "static/chunks/app/admin/(protected)/ui-media/page.js"
+    ],
+    "/admin/(protected)/media/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/admin/(protected)/media/page.js"
     ]
   }
 }

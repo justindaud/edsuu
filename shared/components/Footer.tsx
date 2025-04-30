@@ -98,14 +98,14 @@ export function Footer() {
       {/* Contact Modal */}
       {isContactModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 relative">
+          <div className="bg-white p-8 max-w-md w-full mx-4 relative">
             <button
               onClick={() => setIsContactModalOpen(false)}
               className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
               <IoClose size={24} color="#4b5563" />
             </button>
-            <Text variant="heading" className="mb-6">Mau tanya apa 5ob?</Text>
+            <Text variant="heading" className="mb-6 text-[#EB008B] font-bold">Mau tanya apa 5ob?</Text>
             <ContactForm onSuccess={() => setIsContactModalOpen(false)} />
           </div>
         </div>

@@ -7,8 +7,8 @@ interface Review {
 }
 
 export interface IBeEm extends Document {
-  mediaId: mongoose.Types.ObjectId
-  media: mongoose.Types.ObjectId[]
+  mediaId?: string
+  media?: string[]
   title: string
   year: number
   author: string
@@ -16,8 +16,8 @@ export interface IBeEm extends Document {
   description: string
   reviews: Review[]
   isAvailable: boolean
-  relatedPrograms: mongoose.Types.ObjectId[]
-  relatedPartyLiterasi: mongoose.Types.ObjectId[]
+  relatedPrograms?: string[]
+  relatedPartyLiterasi?: string[]
   createdAt: Date
   updatedAt: Date
 }
@@ -40,14 +40,12 @@ const ReviewSchema = new Schema<Review>({
 const BeEmSchema = new Schema<IBeEm>(
   {
     mediaId: {
-      type: Schema.Types.ObjectId,
-      ref: 'MediaTBYT',
-      required: true,
+      type: String,
+      required: false,
     },
     media: [{
-      type: Schema.Types.ObjectId,
-      ref: 'MediaTBYT',
-      required: true,
+      type: String,
+      required: false,
     }],
     title: {
       type: String,
@@ -78,12 +76,10 @@ const BeEmSchema = new Schema<IBeEm>(
       default: true,
     },
     relatedPrograms: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Program',
+      type: String,
     }],
     relatedPartyLiterasi: [{
-      type: Schema.Types.ObjectId,
-      ref: 'PartyLiterasi',
+      type: String,
     }],
   },
   {

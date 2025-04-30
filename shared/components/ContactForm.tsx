@@ -53,13 +53,13 @@ export function ContactForm({ onSuccess }: ContactFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label htmlFor="name" className="block mb-2">
-          <Text variant="body" className="text-black">Nama</Text>
+          <Text variant="body" className="text-[#EB008B] font-bold">Nama</Text>
         </label>
         <input
           type="text"
           id="name"
           required
-          className="w-full px-4 py-2 rounded-lg bg-white text-black border-2 border-black/10 placeholder-black/30 focus:outline-none focus:border-black transition-colors"
+          className="w-full px-4 py-2 bg-white text-black border-2 border-black/10 placeholder-black/30 focus:outline-none focus:border-black transition-colors"
           placeholder="Nama kamu 5iapa?"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -68,13 +68,13 @@ export function ContactForm({ onSuccess }: ContactFormProps) {
 
       <div>
         <label htmlFor="email" className="block mb-2">
-          <Text variant="body" className="text-black">3mail</Text>
+          <Text variant="body" className="text-[#EB008B] font-bold">3mail</Text>
         </label>
         <input
           type="email"
           id="email"
           required
-          className="w-full px-4 py-2 rounded-lg bg-white text-black border-2 border-black/10 placeholder-black/30 focus:outline-none focus:border-black transition-colors"
+          className="w-full px-4 py-2 bg-white text-black border-2 border-black/10 placeholder-black/30 focus:outline-none focus:border-black transition-colors"
           placeholder="3mail kamu dong!"
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -83,13 +83,13 @@ export function ContactForm({ onSuccess }: ContactFormProps) {
 
       <div>
         <label htmlFor="message" className="block mb-2">
-          <Text variant="body" className="text-black">Kritik 5aran P3rtanyaan</Text>
+          <Text variant="body" className="text-[#EB008B] font-bold">Kritik 5aran P3rtanyaan</Text>
         </label>
         <textarea
           id="message"
           required
           rows={4}
-          className="w-full px-4 py-2 rounded-lg bg-white text-black border-2 border-black/10 placeholder-black/30 focus:outline-none focus:border-black transition-colors resize-none"
+          className="w-full px-4 py-2 bg-white text-black border-2 border-black/10 placeholder-black/30 focus:outline-none focus:border-black transition-colors resize-none"
           placeholder="Mau kirim p35an apa?"
           value={formData.message}
           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -99,7 +99,7 @@ export function ContactForm({ onSuccess }: ContactFormProps) {
       <Button
         type="submit"
         disabled={status === 'loading'}
-        className="w-full bg-black hover:bg-black/80 text-white transition-colors"
+        className="w-full bg-[#EB008B] hover:bg-[#EB008B]/80 text-white transition-colors"
       >
         {status === 'loading' ? 'M3ngirimkan...' : 'Kirim P35an!'}
       </Button>
