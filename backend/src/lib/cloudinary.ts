@@ -1,5 +1,9 @@
 import { v2 as cloudinary } from 'cloudinary'
 import { ApiError } from '../utils/ApiError'
+import path from 'path'
+import dotenv from 'dotenv'
+
+dotenv.config({ path: path.resolve(__dirname, '../../.env.local') })
 
 interface CloudinaryResponse {
   secure_url: string

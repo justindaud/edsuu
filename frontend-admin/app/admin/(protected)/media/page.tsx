@@ -67,10 +67,9 @@ export default function MediaPage() {
 
   const fetchMedia = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/media`, {
+      const response = await fetch(`/api/media`, {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session?.user?.accessToken}`
+          'Content-Type': 'application/json'
         }
       })
       if (!response.ok) throw new Error('Failed to fetch media')
@@ -100,25 +99,36 @@ export default function MediaPage() {
       const formDataToSend = new FormData()
       if (formData.file) {
         formDataToSend.append('file', formData.file)
+      } else if (selectedMedia) {
+        // If editing without a new file, send the existing URLs
+        formDataToSend.append('url', selectedMedia.url)
+        formDataToSend.append('thumbnailUrl', selectedMedia.thumbnailUrl)
+      } else {
+        // This is a new upload and requires a file
+        throw new Error('File is required for new uploads')
       }
+      
       formDataToSend.append('title', formData.title)
       formDataToSend.append('description', formData.description)
       formDataToSend.append('artist', formData.artist || '')
       formDataToSend.append('year', formData.year || '')
       formDataToSend.append('isPublic', formData.isPublic.toString())
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}${selectedMedia ? `/api/media/${selectedMedia._id}` : '/api/media'}`,
-        {
-          method: selectedMedia ? 'PUT' : 'POST',
-          headers: { 
-            'Authorization': `Bearer ${session?.user?.accessToken}`
-          },
-          body: formDataToSend,
-        }
-      )
+      // Use different endpoints for new uploads vs updates, both using Next.js API routes
+      const endpoint = selectedMedia 
+        ? `/api/media/${selectedMedia._id}`
+        : `/api/upload`;
+      
+      const response = await fetch(endpoint, {
+        method: selectedMedia ? 'PUT' : 'POST',
+        body: formDataToSend,
+      })
 
-      if (!response.ok) throw new Error(selectedMedia ? 'Failed to update media' : 'Failed to create media')
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Server error:', errorData);
+        throw new Error(selectedMedia ? 'Failed to update media' : 'Failed to create media');
+      }
       
       toast.success(selectedMedia ? 'Media updated successfully' : 'Media created successfully')
       setShowUploadModal(false)
@@ -127,7 +137,7 @@ export default function MediaPage() {
       fetchMedia()
     } catch (error) {
       console.error('Save error:', error)
-      toast.error(selectedMedia ? 'Failed to update media' : 'Failed to create media')
+      toast.error(error instanceof Error ? error.message : (selectedMedia ? 'Failed to update media' : 'Failed to create media'))
     } finally {
       setSaving(false)
     }
@@ -149,6 +159,8 @@ export default function MediaPage() {
           artist: formData.artist || null,
           year: formData.year || null,
           isPublic: formData.isPublic,
+          url: selectedMedia.url,
+          thumbnailUrl: selectedMedia.thumbnailUrl
         }),
       })
 
@@ -196,11 +208,10 @@ export default function MediaPage() {
     if (!confirm('Are you sure you want to delete this media?')) return
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/media/${id}`, {
+      const response = await fetch(`/api/media/${id}`, {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session?.user?.accessToken}`
+          'Content-Type': 'application/json'
         }
       })
 

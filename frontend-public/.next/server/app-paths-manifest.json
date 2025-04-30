@@ -1,5 +1,11 @@
 {
+  "/not-found": "app/not-found.js",
   "/page": "app/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/programs/route": "app/api/programs/route.js",
   "/public/tokobuku/page": "app/public/tokobuku/page.js",
-  "/public/tokobuku/be-em/page": "app/public/tokobuku/be-em/page.js"
+  "/public/tokobuku/be-em/page": "app/public/tokobuku/be-em/page.js",
+  "/public/programs/[id]/page": "app/public/programs/[id]/page.js",
+  "/public/merchandise/page": "app/public/merchandise/page.js",
+  "/public/edsu-house/page": "app/public/edsu-house/page.js"
 }
