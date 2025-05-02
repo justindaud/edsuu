@@ -147,7 +147,7 @@ export default function PartyLiterasiPage() {
         <h1 className="text-2xl font-bold text-gray-900">Party Literasi Events</h1>
         <Link
           href="/admin/party-literasi/new"
-          className="bg-[#85BAAC] hover:bg-[#85BAAC]/90 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          className="bg-[#6EBDAF] hover:bg-[#6EBDAF]/90 text-white px-4 py-2 rounded-lg flex items-center gap-2"
         >
           <Plus className="h-5 w-5" />
           Event
@@ -163,13 +163,13 @@ export default function PartyLiterasiPage() {
             placeholder="Search events..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
           />
         </div>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as PartyLiterasi['status'] | 'all')}
-          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
         >
           <option value="all">All Status</option>
           <option value="draft">Draft</option>
@@ -181,7 +181,7 @@ export default function PartyLiterasiPage() {
         <select
           value={isPublicFilter}
           onChange={(e) => setIsPublicFilter(e.target.value as 'all' | 'public' | 'private')}
-          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
         >
           <option value="all">All Visibility</option>
           <option value="public">Public</option>
@@ -214,7 +214,7 @@ export default function PartyLiterasiPage() {
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                 <Link
                   href={`/admin/party-literasi/${event._id}`}
-                  className="p-2 bg-[#85BAAC] text-white rounded-full hover:bg-[#85BAAC]/90"
+                  className="p-2 bg-[#6EBDAF] text-white rounded-full hover:bg-[#6EBDAF]/90"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />

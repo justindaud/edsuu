@@ -17,11 +17,11 @@ export default function Card({
   variant = 'default',
   onClick
 }: CardProps) {
-  const baseStyles = 'relative bg-white rounded-lg shadow-sm overflow-hidden'
+  const baseStyles = 'relative bg-white shadow-sm overflow-hidden'
   
   const variantStyles = {
     default: '',
-    hover: 'transition-transform duration-300 hover:-translate-y-1 hover:shadow-md hover:bg-[#EB008B] hover:text-[#85BAAC]',
+    hover: 'transition-transform duration-300 hover:-translate-y-1 hover:shadow-md hover:bg-[#EB008B] hover:text-[#6EBDAF]',
     outline: 'border border-gray-200 shadow-none'
   }
 

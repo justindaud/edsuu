@@ -73,7 +73,7 @@ export default function Dashboard() {
       title: 'Programs',
       value: stats.programs,
       href: '/admin/programs',
-      color: 'bg-[#85BAAC]',
+      color: 'bg-[#6EBDAF]',
     },
     {
       title: 'Articles',
@@ -131,7 +131,7 @@ export default function Dashboard() {
           <h1 className="text-3xl font-bold text-gray-900">Artwork Management</h1>
           <button
             onClick={() => router.push('/admin/dashboard/new')}
-            className="bg-[#85BAAC] text-white px-4 py-2 rounded-md hover:bg-[#85BAAC]/90"
+            className="bg-[#6EBDAF] text-white px-4 py-2 rounded-md hover:bg-[#6EBDAF]/90"
           >
             Add New Artwork
           </button>
@@ -158,7 +158,7 @@ export default function Dashboard() {
                 <div className="mt-4 flex justify-between items-center">
                   <button
                     onClick={() => router.push(`/admin/dashboard/edit/${artwork._id}`)}
-                    className="text-[#85BAAC] hover:text-[#85BAAC]/90"
+                    className="text-[#6EBDAF] hover:text-[#6EBDAF]/90"
                   >
                     Edit
                   </button>

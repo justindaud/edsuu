@@ -1,45 +1,55 @@
 {
   "pages": {
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
     "/public/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/public/layout.js"
     ],
-    "/public/tokobuku/page": [
+    "/public/edsu-house/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/public/tokobuku/page.js"
-    ],
-    "/public/tokobuku/be-em/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/public/tokobuku/be-em/page.js"
+      "static/chunks/app/public/edsu-house/page.js"
     ],
     "/public/programs/[id]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/public/programs/[id]/page.js"
     ],
+    "/public/tokobuku/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/public/tokobuku/page.js"
+    ],
     "/public/merchandise/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/public/merchandise/page.js"
     ],
-    "/public/edsu-house/page": [
+    "/public/articles/[id]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/public/edsu-house/page.js"
+      "static/chunks/app/public/articles/[id]/page.js"
+    ],
+    "/public/tokobuku/be-em/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/public/tokobuku/be-em/page.js"
+    ],
+    "/public/tokobuku/party-literasi/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/public/tokobuku/party-literasi/page.js"
     ],
     "/not-found": [
       "static/chunks/webpack.js",

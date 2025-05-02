@@ -74,7 +74,7 @@ const getAllPrograms = async (): Promise<Program[]> => {
 
 const brandColors = {
   black: '#000000',
-  green: '#85BAAC',
+  green: '#6EBDAF',
   white: '#ffffff',
   pink: '#EB008B'
 }
@@ -297,7 +297,7 @@ export default function () {
       </div>
 
       {/* Articles Section */}
-      <div className="relative bg-[#85BAAC] py-16">
+      <div className="relative bg-[#6EBDAF] py-4">
         <Container className="w-full max-w-none px-0">
           {articles.length > 0 ? (
             <div className="w-full h-[400px] flex items-center justify-center">
@@ -340,14 +340,11 @@ export default function () {
                               </div>
                             )}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                            <div className="absolute bottom-4 left-6 right-6">
-                              <Text variant="heading" className="text-xl font-semibold text-white">{article.title}</Text>
-                            </div>
                           </div>
                           
                           {/* Article Content */}
                           <div className="flex-1 p-4 pt-2">
-                            <Text variant="body" className="text-gray-600 text-sm">{article.author}</Text>
+                          <Text variant="heading" className="text-xl font-semibold text-black">{article.title}</Text>
                             <Text variant="body" className="mt-1 text-gray-600 text-sm line-clamp-2">
                               {article.excerpt}
                             </Text>
@@ -358,7 +355,7 @@ export default function () {
                   ))}
                   
                   {/* Duplicate articles for seamless loop - only if more than 1 article */}
-                  {articles.length > 1 && articles.map((article, index) => (
+                  {articles.length > 3 && articles.map((article, index) => (
                     <div 
                       key={`duplicate-${article.id}`}
                       className="flex-none w-[500px] p-6 relative group snap-center"
@@ -390,14 +387,11 @@ export default function () {
                               </div>
                             )}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                            <div className="absolute bottom-4 left-6 right-6">
-                              <Text variant="heading" className="text-xl font-semibold text-white">{article.title}</Text>
-                            </div>
                           </div>
                           
                           {/* Article Content */}
                           <div className="flex-1 p-4 pt-2">
-                            <Text variant="body" className="text-gray-600 text-sm">{article.author}</Text>
+                            <Text variant="heading" className="text-xl font-semibold text-black">{article.title}</Text>
                             <Text variant="body" className="mt-1 text-gray-600 text-sm line-clamp-2">
                               {article.excerpt}
                             </Text>
@@ -411,23 +405,23 @@ export default function () {
             </div>
           ) : (
             <div className="h-[400px] flex items-center justify-center">
-              <Text variant="body" className="text-gray-500">No articles available for this program</Text>
+              <Text variant="body" className="text-gray-500">No articles yet</Text>
             </div>
           )}
         </Container>
       </div>
 
       {/* Programs Timeline */}
-      <div className="relative bg-[#85BAAC] py-16 z-10 w-full">
-        <Container className="w-full max-w-none px-0">
+      <div className="relative bg-[#6EBDAF] py-16 z-10 w-full">
+        <Container size="full">
           <div className="relative w-full px-8">
             {/* Timeline Line */}
-            <div className="absolute h-0.5 bg-black/20 w-[90%] left-[5%] top-[50%] -translate-y-[-9px]" />
+            <div className="absolute h-0.5 bg-black/20 w-[90%] top-[50%] -translate-y-[-9px]" />
             
             {/* Timeline Content */}
             <div 
               ref={timelineRef}
-              className="relative py-16 w-[90%] mx-auto min-h-[100px]"
+              className="relative w-[90%] mx-auto py-4"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
               {allPrograms.map((prog, index) => {
@@ -457,9 +451,10 @@ export default function () {
                       transform: 'translateX(-50%)'
                     }}
                   >
+
                     {/* Dot */}
                     <div className={`w-5 h-5 rounded-full 
-                      ${isActive ? 'bg-[#EB008B]' : isCurrent ? 'bg-[#85BAAC]' : isPast ? 'bg-black/30' : 'bg-black'} 
+                      ${isActive ? 'bg-[#EB008B]' : isCurrent ? 'bg-black' : isPast ? 'bg-black/30' : 'bg-black'} 
                       transition-all duration-300 z-10
                       group-hover:bg-[#EB008B] group-hover:scale-125
                       ${isActive ? 'group-hover:animate-activeDot' : 'group-hover:animate-activeDot'}`} 
@@ -467,7 +462,7 @@ export default function () {
 
                     {/* Title */}
                     <div className="mt-6 whitespace-nowrap">
-                      <Text variant="body" className={`text-sm font-medium transition-all duration-300
+                      <Text variant="heading" className={`transition-all duration-300 font-bold
                         ${isActive ? 'text-[#EB008B] scale-110' : 'text-black/70'}
                         group-hover:text-[#EB008B] group-hover:scale-110
                         ${isActive ? 'group-hover:animate-activeTitle' : 'group-hover:animate-activeTitle'}`}>
@@ -493,11 +488,13 @@ export default function () {
                           )}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                           <div className="absolute bottom-4 left-4 right-4">
-                            <Text variant="heading" className="text-xl font-semibold text-white">{prog.title}</Text>
+                            <Text variant="heading" className="text-xl font-bold text-white">{prog.title}</Text>
                           </div>
                         </div>
                         <div className="p-4">
-                          <Text variant="body" className="text-gray-600 text-sm mb-2">{prog.description}</Text>
+                          <Text variant="body" className="text-gray-600 text-sm mb-2">
+                            {prog.description.length > 100 ? prog.description.substring(0, 100) + '...' : prog.description}
+                          </Text>
                           <div className="flex items-center gap-2 text-sm text-gray-500">
                             <span>{startDate.toLocaleDateString()}</span>
                             <span>-</span>

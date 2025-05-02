@@ -262,7 +262,7 @@ export default function MerchandisePage() {
     if (status === 'loading' || loading) {
         return (
             <div className="flex justify-center items-center min-h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#85BAAC]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#6EBDAF]"></div>
             </div>
         )
     }
@@ -358,7 +358,7 @@ export default function MerchandisePage() {
                 <Text variant="body" className="font-medium truncate">
                   {item.name}
                 </Text>
-                <Text variant="body" className="text-[#85BAAC] font-semibold">
+                <Text variant="body" className="text-[#6EBDAF] font-semibold">
                   Rp {item.price.toLocaleString('id-ID')}
                 </Text>
                 {item.description && (
@@ -402,7 +402,7 @@ export default function MerchandisePage() {
                 <Text variant="heading" className="text-xl mb-2">
                   {previewMerchandise.name}
                 </Text>
-                <Text variant="body" className="text-[#85BAAC] font-semibold mb-2">
+                <Text variant="body" className="text-[#6EBDAF] font-semibold mb-2">
                   Rp {previewMerchandise.price.toLocaleString('id-ID')}
                 </Text>
                 {previewMerchandise.description && (

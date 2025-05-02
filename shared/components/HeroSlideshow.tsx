@@ -374,14 +374,12 @@ export function HeroSlideshow({ sections }: HeroSlideshowProps) {
         .multicolor-text {
           background: linear-gradient(
             45deg,
-            #85BAAC 20%,
-            #ffffff 40%,
-            #85BAAC 40%,
+            #6EBDAF 20%,
+            #6EBDAF 40%,
             #EB008B 40%,
             #EB008B 60%,
-            #171717 80%,
             #EB008B 80%,
-            #85BAAC 80%
+            #6EBDAF 80%
           );
           background-size: 200% 200%;
           animation: gradientMove 8s linear infinite;
@@ -395,12 +393,10 @@ export function HeroSlideshow({ sections }: HeroSlideshowProps) {
           background: linear-gradient(
             -45deg,
             #EB008B 20%,
-            #171717 40%,
             #EB008B 40%,
-            #85BAAC 40%,
-            #85BAAC 60%,
-            #ffffff 80%,
-            #85BAAC 80%,
+            #6EBDAF 40%,
+            #6EBDAF 60%,
+            #6EBDAF 80%,
             #EB008B 80%
           );
           background-size: 200% 200%;
@@ -415,7 +411,7 @@ export function HeroSlideshow({ sections }: HeroSlideshowProps) {
           background: linear-gradient(
             90deg,
             #171717,
-            #85BAAC,
+            #6EBDAF,
             #EB008B
           );
           background-size: 300% 100%;
@@ -433,7 +429,7 @@ export function HeroSlideshow({ sections }: HeroSlideshowProps) {
           background: linear-gradient(
             45deg,
             #171717,
-            #85BAAC,
+            #6EBDAF,
             #EB008B
           );
           background-size: 300% 300%;

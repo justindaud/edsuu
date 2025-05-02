@@ -94,6 +94,20 @@ export default function ArticleEditPage() {
     setSaving(true)
 
     try {
+      // Prepare data for submission
+      const dataToSubmit = {
+        ...formData,
+        // Add coverImage from the first media item if available
+        coverImage: formData.media.length > 0 ? formData.media[0].url : ''
+      }
+
+      // Validate required coverImage
+      if (!dataToSubmit.coverImage) {
+        toast.error('Please add at least one image')
+        setSaving(false)
+        return
+      }
+
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}${isNew ? '/api/articles' : `/api/articles/${params.id}`}`,
         {
@@ -102,7 +116,7 @@ export default function ArticleEditPage() {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${session?.user?.accessToken}`
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(dataToSubmit),
         }
       )
 

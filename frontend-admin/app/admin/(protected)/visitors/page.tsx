@@ -105,7 +105,7 @@ export default function VisitorsPage() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#85BAAC]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#6EBDAF]"></div>
       </div>
     )
   }
@@ -221,7 +221,7 @@ export default function VisitorsPage() {
             />
           </div>
 
-          <Button type="submit" className="bg-[#85BAAC] hover:bg-[#85BAAC]/90">
+          <Button type="submit" className="bg-[#6EBDAF] hover:bg-[#6EBDAF]/90">
             Add Visitor
           </Button>
         </form>

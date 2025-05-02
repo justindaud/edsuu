@@ -11,7 +11,7 @@ import Image from 'next/image'
 
 const brandColors = {
   black: '#000000',
-  green: '#85BAAC',
+  green: '#6EBDAF',
   white: '#ffffff',
   pink: '#EB008B'
 }
@@ -22,24 +22,10 @@ export function Footer() {
   return (
     <>
       <footer className="bg-[#EB008B] w-full">
+        {/* Footer Content */}
         <Container className="w-full max-w-none px-4 md:px-8">
           <div className="py-6">
             <div className="flex items-center justify-between flex-wrap gap-6">
-              {/* Map & Contact */}
-              <div className="flex items-center gap-4">
-                <a href="https://maps.app.goo.gl/E14UuV3vYpdLf3sM9" target="_blank" rel="noopener noreferrer" className="social-icon-link" title="EDSU House Location">
-                  <div className="social-icon-wrapper">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                      <circle cx="12" cy="10" r="3"></circle>
-                    </svg>
-                  </div>
-                </a>
-                <button onClick={() => setIsContactModalOpen(true)} className="contact-button">
-                  Tanya!?
-                </button>
-              </div>
-
               <div className="flex items-center gap-8">
                 {/* Gallery Links */}
                 <div className="flex items-center gap-4">
@@ -67,7 +53,18 @@ export function Footer() {
                     </div>
                   </a>
                 </div>
+              </div>
 
+              {/* Contact Button */}
+              <div className="flex items-center gap-4">
+                <button onClick={() => setIsContactModalOpen(true)} className="contact-button">
+                  Tanya!?
+                </button>
+              </div>
+
+              
+
+              <div className="flex items-center gap-8">
                 {/* Bookstore Links */}
                 <div className="flex items-center gap-4">
                   <div className="w-24 h-8 relative">
@@ -89,6 +86,16 @@ export function Footer() {
                     </div>
                   </a>
                 </div>
+              </div>
+              {/* Map Section */}
+              <div className="relative h-[250px] w-full">
+                <iframe 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d988.4647811447902!2d110.38087232243927!3d-7.758182399999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a592c3b456be3%3A0x78e9499afb829d42!2sEDSU%20house!5e0!3m2!1sen!2sid!4v1711460429818!5m2!1sen!2sid"
+                  className="w-full h-full border-0 opacity-70 hover:opacity-100 transition-opacity duration-300"
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
               </div>
             </div>
           </div>

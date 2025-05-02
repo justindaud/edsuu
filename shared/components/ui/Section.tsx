@@ -47,7 +47,7 @@ export default function Section({
       {background === 'gradient' && (
         <>
           <div className="floating-square bg-[#EB008B]/20" style={{ top: '10%', left: '5%' }} />
-          <div className="floating-circle bg-[#85BAAC]/20" style={{ top: '30%', right: '10%' }} />
+          <div className="floating-circle bg-[#6EBDAF]/20" style={{ top: '30%', right: '10%' }} />
           <div className="floating-triangle border-b-[#EB008B]/20" style={{ bottom: '20%', left: '15%' }} />
         </>
       )}

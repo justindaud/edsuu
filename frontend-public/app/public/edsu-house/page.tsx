@@ -7,9 +7,7 @@ async function getEdsuHouseContent() {
   // TODO: Implement API call to fetch EDSU House content
   return {
     title: 'T3ntang Kami',
-    description: `Edsu house menggabungkan warisan sejarah dengan ekspresi budaya kontemporer.
-    Terletak di wilayah utara Yogyakarta dalam kompleks Pulang ke Uttara,
-    galeri ini terinspirasi dari kehidupan dan karya pematung ternama Indonesia,
+    description: `Edsu house menggabungkan warisan sejarah dengan ekspresi budaya kontemporer. Terletak di wilayah utara Yogyakarta dalam kompleks Pulang ke Uttara, galeri ini terinspirasi dari kehidupan dan karya pematung ternama Indonesia,
     Edhi Sunarso.`,
     media: ['/placeholder/edsu1.jpg', '/placeholder/edsu2.jpg'],
     content: [
@@ -21,20 +19,20 @@ async function getEdsuHouseContent() {
     sections: {
       gallery: {
         whiteSpace: {
-          title: 'Th3 Whit3 5pac3',
+          title: 'The White Space',
           description: 'Ruang yang terang dan netral, memungkinkan interpretasi terbuka serta mendukung narasi multi-layered dalam karya seni',
           media: ['/placeholder/white-space1.jpg', '/placeholder/white-space2.jpg'],
           locationId: 'edsu.gallery.white-space.1' as UIMediaLocationId
         },
         blackBox: {
-          title: 'Th3 Black Box',
+          title: 'The Black Box',
           description: 'Ruang dramatis dengan pencahayaan terfokus untuk menciptakan pengalaman yang lebih mendalam dan introspektif bagi pengunjung',
           media: ['/placeholder/black-box1.jpg', '/placeholder/black-box2.jpg'],
           locationId: 'edsu.gallery.black-box.1' as UIMediaLocationId
         }
       },
       entrance: {
-        title: 'Pintu Ma5uk Gal3ri',
+        title: 'Wrong Way',
         description: 'Pintu masuk EDSU House akan menjadi ekspresi artistik langsung dari Wawan Dalbo, seniman sekaligus pemilik galeri. Karya ini merefleksikan perjalanannya sebagai seniman dan arsitek. Terinspirasi dari karyanya Wrong Way (ArtJOG, 2024), Dalbo menggabungkan desain arsitektural dengan storytelling. Karyanya mengeksplorasi jalan hidup yang tak terduga, melambangkan keindahan dalam perjalanan yang penuh kejutan—sebuah narasi yang selaras dengan konsep pintu masuk galeri, tempat pengunjung memulai eksplorasi kreatif mereka.',
         media: ['/placeholder/entrance1.jpg', '/placeholder/entrance2.jpg'],
         locationId: 'edsu.entrance.1' as UIMediaLocationId
@@ -62,10 +60,6 @@ async function getEdsuHouseContent() {
             locationId: 'edsu.compound.music.1' as UIMediaLocationId
           }
         ]
-      },
-      location: {
-        title: 'Loka5i 3d5u',
-        description: 'Galeri EDSU terletak di Jl. Kaliurang No.72 - KM 5.5, Yogyakarta, sebuah kawasan seni yang pernah menjadi rumah bagi maestro patung Indonesia, Edhi Sunarso.'
       }
     }
   }
@@ -75,9 +69,10 @@ export default async function EdsuHousePage() {
   const content = await getEdsuHouseContent()
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#EB008B]">
       {/* Hero Section */}
-      <div className="h-[70vh] relative bg-[#85BAAC]">
+      <div className="h-[100vh] relative bg-[#6EBDAF]">
+        {/* Hero Image */}
         <div className="absolute inset-0">
           <UIMedia 
             locationId="edsu.hero.1"
@@ -85,98 +80,105 @@ export default async function EdsuHousePage() {
             alt="EDSU House Hero"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#85BAAC]/80 to-transparent"></div>
-        </div>
-        <div className="absolute inset-0 flex items-center">
-          <Container>
-            <Text variant="heading" className="text-[#EB008B] text-4xl mb-4 glitch-text animate-float">
-              {content.title}
-            </Text>
-            <Text variant="lead" className="text-[#EB008B] max-w-2xl whitespace-pre-line fade-in animate-slideIn">
-              {content.description}
-            </Text>
-          </Container>
+
+          {/* Hero Text */}
+          <div className="absolute inset-0 flex items-center">
+            <Container size='full' > 
+              {/* Title */}
+              <div className="absolute bottom-8 left-8 right-8">   
+                <Text variant="heading" className="text-[#EB008B] text-4xl mb-4 glitch-text animate-float">
+                  {content.title}
+                </Text>
+                {/* Description */}
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-6 text-justify'>
+                  <Text variant="body" className="text-[#EB008B] max-w-4xl font-bold whitespace-pre-line fade-in animate-slideIn">
+                    {content.description}
+                  </Text>
+                  {content.content.map((section, index) => (
+                  <div key={index} className="space-y-4 hover-lift text-justify">
+                    <Text variant="body" className="text-[#EB008B] font-bold whitespace-pre-line fade-in animate-slideIn">{section.text}</Text>
+                  </div>
+                  ))}
+                </div>
+              </div>
+            </Container>
+          </div>
         </div>
       </div>
 
-      {/* Content Sections */}
-      <Container className="py-12 bg-[#EB008B]">
-        <Grid cols={1}>
-          {content.content.map((section, index) => (
-            <div key={index} className="space-y-4 hover-lift">
-              <Text variant="heading" className="text-[#85BAAC] text-2xl glitch-text">{section.title}</Text>
-              <Text variant="body" className="text-[#85BAAC]">{section.text}</Text>
-            </div>
-          ))}
-        </Grid>
-      </Container>
-
       {/* Gallery Section */}
-      <section className="py-16 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-100/30 to-transparent animate-pulse"></div>
-        <Container className="relative">
-          <Text variant="heading" className="text-4xl mb-12 glitch-text animate-float">Gal3ri</Text>
-          <Grid cols={2} className="gap-8">
+      <section className="py-12 relative overflow-hidden">
+        <Container size='full' className='px-8'>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* White Space */}
-            <div className="space-y-6 hover-lift hover-glow animate-fadeIn">
-              <div className="h-[50vh] relative overflow-hidden rounded-lg">
+            <div className="hover-lift hover-glow animate-fadeIn bg-white">
+              <div className="h-[50vh] relative overflow-hidden">
                 <UIMedia 
                   locationId={content.sections.gallery.whiteSpace.locationId}
                   className="w-full h-full object-cover"
                   alt={content.sections.gallery.whiteSpace.title}
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent mix-blend-overlay"></div>
               </div>
-              <Text variant="heading" className="text-2xl glitch-text">{content.sections.gallery.whiteSpace.title}</Text>
-              <Text variant="body" className="fade-in">{content.sections.gallery.whiteSpace.description}</Text>
+              <div className='px-8 py-4'>
+                <Text variant="heading" className="text-xl glitch-text text-[#EB008B]">{content.sections.gallery.whiteSpace.title}</Text>
+                <Text variant="body" className="fade-in text-[#EB008B] font-bold">{content.sections.gallery.whiteSpace.description}</Text>
+              </div>
             </div>
             {/* Black Box */}
-            <div className="space-y-6 hover-lift hover-glow animate-fadeIn delay-200">
-              <div className="h-[50vh] relative overflow-hidden rounded-lg">
+            <div className="hover-lift hover-glow animate-fadeIn delay-200 bg-white">
+              <div className="h-[50vh] relative overflow-hidden">
                 <UIMedia 
                   locationId={content.sections.gallery.blackBox.locationId}
                   className="w-full h-full object-cover"
                   alt={content.sections.gallery.blackBox.title}
                 />
-                <div className="absolute inset-0 bg-gradient-to-l from-black/10 to-transparent mix-blend-overlay"></div>
               </div>
-              <Text variant="heading" className="text-2xl glitch-text">{content.sections.gallery.blackBox.title}</Text>
-              <Text variant="body" className="fade-in">{content.sections.gallery.blackBox.description}</Text>
+              <div className='px-8 py-4'>
+                <Text variant="heading" className="text-xl glitch-text text-[#EB008B]">{content.sections.gallery.blackBox.title}</Text>
+                <Text variant="body" className="fade-in text-[#EB008B] font-bold">{content.sections.gallery.blackBox.description}</Text>
+              </div>
             </div>
-          </Grid>
+          </div>
         </Container>
       </section>
 
       {/* Entrance Section */}
-      <section className="py-16 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-100/30 to-transparent animate-pulse"></div>
-        <Container className="relative">
-          <Text variant="heading" className="text-4xl mb-12 glitch-text animate-float">{content.sections.entrance.title}</Text>
-          <Grid cols={2} className="gap-8">
-            <div className="h-[60vh] relative hover-lift hover-glow animate-fadeIn">
-              <UIMedia 
-                locationId={content.sections.entrance.locationId}
-                className="w-full h-full object-cover"
-                alt={content.sections.entrance.title}
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 mix-blend-overlay"></div>
+      <section className="py-12 relative overflow-hidden">
+        <Container size="full" className="relative">
+          <Container size="full">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-12">
+              {/* Left side - Image (Full width on mobile, 8 cols on large screens) */}
+              <div className="lg:col-span-8 order-2 lg:order-1">
+                <div className="relative aspect-[16/9] overflow-hidden hover-lift hover-glow animate-fadeIn">
+                  <UIMedia 
+                    locationId={content.sections.entrance.locationId}
+                    className="w-full h-full object-cover"
+                    alt={content.sections.entrance.title}
+                  />
+                </div>
+              </div>
+              
+              {/* Right side - Content (Full width on mobile, 4 cols on large screens) */}
+              <div className="lg:col-span-4 order-1 lg:order-2 flex items-center">
+                <div className="space-y-6 flex flex-col justify-center animate-slideIn delay-200">
+                  <Text variant="heading" className="text-4xl font-bold text-white">{content.sections.entrance.title}</Text>
+                  <Text variant="body" className="whitespace-pre-line text-white font-bold">{content.sections.entrance.description}</Text>
+                </div>
+              </div>
             </div>
-            <div className="space-y-6 flex flex-col justify-center animate-slideIn delay-200">
-              <Text variant="body" className="whitespace-pre-line">{content.sections.entrance.description}</Text>
-            </div>
-          </Grid>
+          </Container>
         </Container>
       </section>
 
       {/* Compound Section */}
-      <section className="py-16 bg-gray-50 relative overflow-hidden">
+      <section className="py-16 bg-[#6EBDAF] relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-pink-500/5 animate-gradient-x"></div>
-        <Container className="relative">
-          <Text variant="heading" className="text-4xl mb-12 glitch-text animate-float">Th3 Compound</Text>
+        <Container size="full" className="relative">
+          <Text variant="heading" className="text-4xl mb-12 glitch-text animate-float text-[#EB008B]">Th3 Compound</Text>
           <Grid cols={2} className="gap-8">
             {content.sections.compound.sections.map((section, index) => (
               <div key={index} className="space-y-6 hover-lift hover-glow animate-fadeIn" style={{ animationDelay: `${index * 200}ms` }}>
-                <div className="h-[40vh] relative overflow-hidden rounded-lg">
+                <div className="h-[40vh] relative overflow-hidden">
                   <UIMedia 
                     locationId={section.locationId}
                     className="w-full h-full object-cover"
@@ -184,7 +186,7 @@ export default async function EdsuHousePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-transparent mix-blend-overlay"></div>
                 </div>
-                <Text variant="heading" className="text-2xl glitch-text">{section.title}</Text>
+                <Text variant="heading" className="text-2xl glitch-text text-[#EB008B]">{section.title}</Text>
               </div>
             ))}
           </Grid>
@@ -192,79 +194,41 @@ export default async function EdsuHousePage() {
       </section>
 
       {/* BNN Section */}
-      <section className="py-16 bg-gray-50 relative overflow-hidden">
+      <section className="py-16 bg-[#6EBDAF] relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 via-purple-500/5 to-cyan-500/5 animate-gradient-x"></div>
-        <Container className="relative">
-          <Text variant="heading" className="text-4xl mb-12 glitch-text animate-float">BNN (Badan Ny3ni & Ngawur)</Text>
-          <Grid cols={2} className="gap-12">
+        <Container size="full" className="relative">
+          <Text variant="heading" className="text-4xl mb-12 glitch-text animate-float text-[#EB008B]">BNN (Badan Ny3ni & Ngawur)</Text>
+          <Container size="xl">
             <div className="space-y-8 animate-slideIn">
               {/* Left Column */}
               <div className="space-y-6 hover-lift">
                 <div className="flex justify-between items-center">
-                  <Text variant="heading" className="text-2xl">Wawan Dalbo</Text>
-                  <Text variant="body" className="text-gray-600">Founder</Text>
+                  <Text variant="heading" className="text-xl text-[#EB008B]">Wawan Dalbo</Text>
+                  <Text variant="body" className="text-gray-600 font-bold text-[#EB008B]">Founder</Text>
                 </div>
                 <div className="flex justify-between items-center">
-                  <Text variant="heading" className="text-2xl">Christine Toelle</Text>
-                  <Text variant="body" className="text-gray-600">Program Director</Text>
+                  <Text variant="heading" className="text-xl text-[#EB008B]">Christine Toelle</Text>
+                  <Text variant="body" className="text-gray-600 font-bold text-[#EB008B]">Program Director</Text>
                 </div>
                 <div className="flex justify-between items-center">
-                  <Text variant="heading" className="text-2xl">Faiz Dwiana</Text>
-                  <Text variant="body" className="text-gray-600">Graphic Designer</Text>
+                  <Text variant="heading" className="text-xl text-[#EB008B]">Faiz Dwiana</Text>
+                  <Text variant="body" className="text-gray-600 font-bold text-[#EB008B]">Graphic Designer</Text>
                 </div>
                 <div className="flex justify-between items-center">
-                  <Text variant="heading" className="text-2xl">If El Lang Rajendra</Text>
-                  <Text variant="body" className="text-gray-600">Gallery Assistant</Text>
+                  <Text variant="heading" className="text-xl text-[#EB008B]">If El Lang Rajendra</Text>
+                  <Text variant="body" className="text-gray-600 font-bold text-[#EB008B]">Gallery Assistant</Text>
                 </div>
                 <div className="flex justify-between items-center">
-                  <Text variant="heading" className="text-2xl">Siti Nurjanah</Text>
-                  <Text variant="body" className="text-gray-600">Toko Buku Yang Tau</Text>
+                  <Text variant="heading" className="text-xl text-[#EB008B]">Siti Nurjanah</Text>
+                  <Text variant="body" className="text-gray-600 font-bold text-[#EB008B]">Toko Buku Yang Tau</Text>
                 </div>
                 <div className="flex justify-between items-center">
-                  <Text variant="heading" className="text-2xl">Ingrid Karunia</Text>
-                  <Text variant="body" className="text-gray-600">Marketing Communication</Text>
+                  <Text variant="heading" className="text-xl text-[#EB008B]">Ingrid Karunia</Text>
+                  <Text variant="body" className="text-gray-600 font-bold text-[#EB008B]">Marketing Communication</Text>
                 </div>
               </div>
             </div>
-
-            <div className="space-y-8 animate-slideIn delay-200">
-              {/* Right Column */}
-              <div className="space-y-6 hover-lift">
-                <div className="flex justify-between items-center">
-                  <Text variant="heading" className="text-2xl">Andi Rahmat/NUSAÉ</Text>
-                  <Text variant="body" className="text-gray-600">Art Director</Text>
-                </div>
-                <div className="flex justify-between items-center">
-                  <Text variant="heading" className="text-2xl">Lambox Sinaga</Text>
-                  <Text variant="body" className="text-gray-600">Photographer</Text>
-                </div>
-                <div className="flex justify-between items-center">
-                  <Text variant="heading" className="text-2xl">NUSAÉ</Text>
-                  <Text variant="body" className="text-gray-600">Brand Consultant</Text>
-                </div>
-              </div>
-            </div>
-          </Grid>
-        </Container>
-      </section>
-
-      {/* Location Section */}
-      <section className="py-16 relative overflow-hidden" id="location">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-pink-100/30 to-transparent animate-pulse"></div>
-        <Container className="relative">
-          <Text variant="heading" className="text-4xl mb-12 glitch-text animate-float">{content.sections.location.title}</Text>
-          <div className="space-y-8">
-            <Text variant="body" className="mb-8 fade-in animate-slideIn">{content.sections.location.description}</Text>
-            <div className="h-[50vh] relative rounded-lg overflow-hidden shadow-lg hover-lift hover-glow animate-fadeIn">
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d988.4647811447902!2d110.38087232243927!3d-7.758182399999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a592c3b456be3%3A0x78e9499afb829d42!2sEDSU%20house!5e0!3m2!1sen!2sid!4v1711460429818!5m2!1sen!2sid"
-                className="w-full h-full border-0"
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-            </div>
-          </div>
+          </Container>
         </Container>
       </section>
     </div>

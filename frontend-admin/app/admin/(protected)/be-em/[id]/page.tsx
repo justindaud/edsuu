@@ -318,7 +318,7 @@ export default function BookEditPage() {
               type="text"
               value={formData.title}
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-              className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+              className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
               required
             />
           </div>
@@ -328,7 +328,7 @@ export default function BookEditPage() {
               type="text"
               value={formData.author}
               onChange={(e) => setFormData(prev => ({ ...prev, author: e.target.value }))}
-              className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+              className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
               required
             />
           </div>
@@ -341,7 +341,7 @@ export default function BookEditPage() {
               type="number"
               value={formData.year}
               onChange={(e) => setFormData(prev => ({ ...prev, year: parseInt(e.target.value) }))}
-              className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+              className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
               required
             />
           </div>
@@ -351,7 +351,7 @@ export default function BookEditPage() {
               type="number"
               value={formData.price}
               onChange={(e) => setFormData(prev => ({ ...prev, price: parseInt(e.target.value) }))}
-              className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+              className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
               required
             />
           </div>
@@ -362,7 +362,7 @@ export default function BookEditPage() {
           <textarea
             value={formData.description}
             onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
             rows={5}
             required
           />
@@ -393,7 +393,7 @@ export default function BookEditPage() {
                       type="text"
                       value={review.reviewer}
                       onChange={(e) => handleReviewChange(index, 'reviewer', e.target.value)}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+                      className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
                       required
                     />
                   </div>
@@ -402,7 +402,7 @@ export default function BookEditPage() {
                     <textarea
                       value={review.text}
                       onChange={(e) => handleReviewChange(index, 'text', e.target.value)}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+                      className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
                       rows={3}
                       required
                     />
@@ -528,7 +528,7 @@ export default function BookEditPage() {
                   key={media._id}
                   type="button"
                   onClick={() => handleMediaSelect(media)}
-                  className="relative aspect-square rounded-lg overflow-hidden hover:ring-2 hover:ring-[#85BAAC] focus:outline-none"
+                  className="relative aspect-square rounded-lg overflow-hidden hover:ring-2 hover:ring-[#6EBDAF] focus:outline-none"
                 >
                   <Image
                     src={media.thumbnailUrl}

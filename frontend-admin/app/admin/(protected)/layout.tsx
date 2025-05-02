@@ -121,7 +121,7 @@ export default function ProtectedLayout({
   if (isLoading || status === 'loading') {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#85BAAC]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#6EBDAF]"></div>
       </div>
     )
   }
@@ -140,14 +140,14 @@ export default function ProtectedLayout({
         }`}
       >
         {/* Logo area */}
-        <div className="p-4 border-b flex items-center justify-between bg-[#85BAAC]">
+        <div className="p-4 border-b flex items-center justify-between bg-[#6EBDAF]">
           <h1 className={`font-bold text-white ${isMinimized ? 'hidden' : 'block'}`}>
             EDSU HOUSE
           </h1>
           {/* Toggle button */}
           <button
             onClick={() => setIsMinimized(!isMinimized)}
-            className="p-1 hover:bg-[#85BAAC]/80 rounded-lg text-white"
+            className="p-1 hover:bg-[#6EBDAF]/80 rounded-lg text-white"
             title={isMinimized ? "Expand sidebar" : "Collapse sidebar"}
           >
             {isMinimized ? (
@@ -170,7 +170,7 @@ export default function ProtectedLayout({
               href={item.href}
               className={`flex items-center px-4 py-3 transition-colors ${
                 pathname === item.href
-                  ? 'bg-[#85BAAC]/10 text-[#85BAAC]'
+                  ? 'bg-[#6EBDAF]/10 text-[#6EBDAF]'
                   : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
               }`}
             >

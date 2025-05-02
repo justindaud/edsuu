@@ -58,18 +58,48 @@ const getActiveProgram = async (): Promise<Program | null> => {
       new Date(p.endDate) >= new Date()
     )
 
-    if (!activeProgram) return null
-
-    return {
-      id: activeProgram._id,
-      title: activeProgram.title,
-      description: activeProgram.description,
-      media: activeProgram.media.map((m: any) => ({ url: m.url })),
-      startDate: activeProgram.startDate,
-      endDate: activeProgram.endDate,
-      isPublic: activeProgram.isPublic,
-      status: activeProgram.status
+    // Return active program if found
+    if (activeProgram) {
+      return {
+        id: activeProgram._id,
+        title: activeProgram.title,
+        description: activeProgram.description,
+        media: activeProgram.media.map((m: any) => ({ url: m.url })),
+        startDate: activeProgram.startDate,
+        endDate: activeProgram.endDate,
+        isPublic: activeProgram.isPublic,
+        status: activeProgram.status
+      }
     }
+
+    // Fallback: Find the nearest upcoming public program if no active program
+    const now = new Date()
+    const upcomingPrograms = data
+      .filter((p: any) => 
+        p.isPublic && 
+        (p.status === 'scheduled') &&
+        new Date(p.startDate) > now
+      )
+      .sort((a: any, b: any) => 
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+      )
+    
+    const nearestUpcoming = upcomingPrograms.length > 0 ? upcomingPrograms[0] : null
+    
+    if (nearestUpcoming) {
+      return {
+        id: nearestUpcoming._id,
+        title: nearestUpcoming.title,
+        description: nearestUpcoming.description,
+        media: nearestUpcoming.media.map((m: any) => ({ url: m.url })),
+        startDate: nearestUpcoming.startDate,
+        endDate: nearestUpcoming.endDate,
+        isPublic: nearestUpcoming.isPublic,
+        status: nearestUpcoming.status
+      }
+    }
+
+    return null
   } catch (error) {
     console.error('Error fetching active program:', error)
     return null
@@ -129,24 +159,24 @@ export default function Home() {
     const fetchData = async () => {
       try {
         setIsLoading(true)
-        const activeProgram = await getActiveProgram()
+        const programData = await getActiveProgram()
         
-        // Combine the active program with static sections
+        // Combine the active or upcoming program with static sections
         const sections = [
-          // Active program section if exists - keep this dynamic without locationId
-          activeProgram ? {
-            id: activeProgram.id,
-            title: activeProgram.title,
-            description: "Kunjungi Program",
-            images: activeProgram.media.map(m => m.url),
-            link: `/public/programs/${activeProgram.id}`
+          // Program section - either active, upcoming, or fallback
+          programData ? {
+            id: programData.id,
+            title: programData.title,
+            description: programData.status === 'ongoing' ? "Kunjungi Program" : "Program Mendatang",
+            images: programData.media.map(m => m.url),
+            link: `/public/programs/${programData.id}`
           } : {
             id: 'no-program',
             title: 'Program',
-            description: 'Kunjungi Program',
-            images: ['/placeholder/program1.jpg'],
-            link: '/public/programs/${activeProgram.id}',
-            text: ""
+            description: 'Lihat Semua Program',
+            images: ['/images/placeholder/program1.jpg'],
+            link: '/public/programs',
+            text: "Lihat seluruh program"
           },
           // Static sections
           ...staticSections
@@ -160,8 +190,8 @@ export default function Home() {
           {
             id: 'no-program',
             title: 'Program',
-            description: 'Kunjungi Program',
-            images: ['/placeholder/program1.jpg'],
+            description: 'Lihat Semua Program',
+            images: ['/images/placeholder/program1.jpg'],
             link: '/public/programs',
             text: "Lihat seluruh program"
           },

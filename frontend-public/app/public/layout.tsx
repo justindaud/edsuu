@@ -41,7 +41,7 @@ export default function PublicLayout({
         </Link>
       </div>
 
-      <main className="flex-grow">
+      <main className="flex-grow pt-15">
         {children}
       </main>
     </div>

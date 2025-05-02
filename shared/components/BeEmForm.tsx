@@ -134,7 +134,7 @@ export default function BeEmForm({ onSubmit, initialData, media, selectedMedia, 
               }
             }}
             maxLength={200}
-            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
             required
           />
         </div>
@@ -144,7 +144,7 @@ export default function BeEmForm({ onSubmit, initialData, media, selectedMedia, 
             type="text"
             value={formData.author}
             onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
             required
           />
         </div>
@@ -157,7 +157,7 @@ export default function BeEmForm({ onSubmit, initialData, media, selectedMedia, 
             type="number"
             value={formData.year}
             onChange={(e) => setFormData({ ...formData, year: Number(e.target.value) })}
-            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
             min={1900}
             max={new Date().getFullYear()}
             required
@@ -169,7 +169,7 @@ export default function BeEmForm({ onSubmit, initialData, media, selectedMedia, 
             type="number"
             value={formData.price}
             onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
-            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+            className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
             min={0}
             required
           />
@@ -187,7 +187,7 @@ export default function BeEmForm({ onSubmit, initialData, media, selectedMedia, 
             }
           }}
           maxLength={2000}
-          className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+          className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
           rows={5}
           required
         />
@@ -199,7 +199,7 @@ export default function BeEmForm({ onSubmit, initialData, media, selectedMedia, 
           id="isAvailable"
           checked={formData.isAvailable}
           onChange={(e) => setFormData({ ...formData, isAvailable: e.target.checked })}
-          className="h-4 w-4 text-[#85BAAC] focus:ring-[#85BAAC] border-gray-300 rounded"
+          className="h-4 w-4 text-[#6EBDAF] focus:ring-[#6EBDAF] border-gray-300 rounded"
         />
         <label htmlFor="isAvailable">
           <Text variant="body">Book is available for purchase</Text>

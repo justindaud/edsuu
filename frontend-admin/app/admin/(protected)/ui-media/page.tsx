@@ -263,7 +263,7 @@ export default function UIMediaPage() {
         <Text variant="heading" className="text-2xl font-bold text-gray-900">UI Media</Text>
         <Button
           variant="primary"
-          className="bg-[#85BAAC] hover:bg-[#85BAAC]/90 text-white px-4 py-2 rounded-lg flex items-center gap-2"
+          className="bg-[#6EBDAF] hover:bg-[#6EBDAF]/90 text-white px-4 py-2 rounded-lg flex items-center gap-2"
           onClick={() => setShowUploadModal(true)}
           disabled={uploading}
         >
@@ -281,13 +281,13 @@ export default function UIMediaPage() {
             placeholder="Search media..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
           />
         </div>
         <select
           value={sortField}
           onChange={(e) => setSortField(e.target.value as SortField)}
-          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
         >
           <option value="createdAt">Date Created</option>
           <option value="title">Title</option>
@@ -296,7 +296,7 @@ export default function UIMediaPage() {
         <Button
           variant="outline"
           onClick={() => setSortOrder(order => order === 'asc' ? 'desc' : 'asc')}
-          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+          className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
         >
           {sortOrder === 'asc' ? '↑' : '↓'}
         </Button>
@@ -320,7 +320,7 @@ export default function UIMediaPage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="p-2 bg-[#85BAAC] text-white rounded-full hover:bg-[#85BAAC]/90"
+                  className="p-2 bg-[#6EBDAF] text-white rounded-full hover:bg-[#6EBDAF]/90"
                   onClick={(e) => {
                     e.stopPropagation()
                     openEditModal(item)
@@ -407,7 +407,7 @@ export default function UIMediaPage() {
                       setFormData(prev => ({ ...prev, file }))
                     }
                   }}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
                   accept="image/jpeg,image/png,image/gif,image/webp"
                   required
                 />
@@ -440,7 +440,7 @@ export default function UIMediaPage() {
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
                     required
                   />
                 </div>
@@ -449,7 +449,7 @@ export default function UIMediaPage() {
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
                     rows={3}
                   />
                 </div>
@@ -459,7 +459,7 @@ export default function UIMediaPage() {
                     id="isPublic"
                     checked={formData.isPublic}
                     onChange={(e) => setFormData(prev => ({ ...prev, isPublic: e.target.checked }))}
-                    className="h-4 w-4 text-[#85BAAC] focus:ring-[#85BAAC] border-gray-300 rounded"
+                    className="h-4 w-4 text-[#6EBDAF] focus:ring-[#6EBDAF] border-gray-300 rounded"
                   />
                   <label htmlFor="isPublic" className="text-gray-700">
                     Make this media public
@@ -475,7 +475,7 @@ export default function UIMediaPage() {
                           id={`location-${locationId}`}
                           checked={formData.locationIds.includes(locationId)}
                           onChange={(e) => handleLocationSelectionChange(locationId, e.target.checked)}
-                          className="h-4 w-4 text-[#85BAAC] focus:ring-[#85BAAC] border-gray-300 rounded"
+                          className="h-4 w-4 text-[#6EBDAF] focus:ring-[#6EBDAF] border-gray-300 rounded"
                         />
                         <label htmlFor={`location-${locationId}`} className="ml-2 text-sm text-gray-700">
                           {info.title}
@@ -492,7 +492,7 @@ export default function UIMediaPage() {
                       min="0"
                       value={formData.index || 0}
                       onChange={(e) => setFormData(prev => ({ ...prev, index: parseInt(e.target.value, 10) }))}
-                      className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+                      className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
                     />
                   </div>
                 )}
@@ -505,14 +505,14 @@ export default function UIMediaPage() {
                     setShowUploadModal(false)
                     setFormData({ title: '', description: '', isPublic: true, locationIds: [], index: 0 })
                   }}
-                  className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+                  className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   disabled={uploading}
-                  className="bg-[#85BAAC] hover:bg-[#85BAAC]/90 text-white px-4 py-2 rounded-lg"
+                  className="bg-[#6EBDAF] hover:bg-[#6EBDAF]/90 text-white px-4 py-2 rounded-lg"
                 >
                   {uploading ? 'Uploading...' : 'Upload'}
                 </Button>
@@ -546,7 +546,7 @@ export default function UIMediaPage() {
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
                   required
                 />
               </div>
@@ -555,7 +555,7 @@ export default function UIMediaPage() {
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
                   rows={3}
                 />
               </div>
@@ -565,7 +565,7 @@ export default function UIMediaPage() {
                   id="editIsPublic"
                   checked={formData.isPublic}
                   onChange={(e) => setFormData(prev => ({ ...prev, isPublic: e.target.checked }))}
-                  className="h-4 w-4 text-[#85BAAC] focus:ring-[#85BAAC] border-gray-300 rounded"
+                  className="h-4 w-4 text-[#6EBDAF] focus:ring-[#6EBDAF] border-gray-300 rounded"
                 />
                 <label htmlFor="editIsPublic" className="text-gray-700">
                   Make this media public
@@ -581,7 +581,7 @@ export default function UIMediaPage() {
                         id={`edit-location-${locationId}`}
                         checked={formData.locationIds.includes(locationId)}
                         onChange={(e) => handleLocationSelectionChange(locationId, e.target.checked)}
-                        className="h-4 w-4 text-[#85BAAC] focus:ring-[#85BAAC] border-gray-300 rounded"
+                        className="h-4 w-4 text-[#6EBDAF] focus:ring-[#6EBDAF] border-gray-300 rounded"
                       />
                       <label htmlFor={`edit-location-${locationId}`} className="ml-2 text-sm text-gray-700">
                         {info.title}
@@ -598,7 +598,7 @@ export default function UIMediaPage() {
                     min="0"
                     value={formData.index || 0}
                     onChange={(e) => setFormData(prev => ({ ...prev, index: parseInt(e.target.value, 10) }))}
-                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+                    className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
                   />
                 </div>
               )}
@@ -610,13 +610,13 @@ export default function UIMediaPage() {
                     setSelectedMedia(null)
                     setFormData({ title: '', description: '', isPublic: true, locationIds: [], index: 0 })
                   }}
-                  className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#85BAAC]"
+                  className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6EBDAF]"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-[#85BAAC] hover:bg-[#85BAAC]/90 text-white px-4 py-2 rounded-lg"
+                  className="bg-[#6EBDAF] hover:bg-[#6EBDAF]/90 text-white px-4 py-2 rounded-lg"
                 >
                   Save Changes
                 </Button>

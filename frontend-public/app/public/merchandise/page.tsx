@@ -79,15 +79,12 @@ export default async function MerchandisePage() {
   console.log('Products length:', products.length)
 
   return (
-    <div className="min-h-screen">
-      <Container className="py-12">
-        <Text variant="heading" className="mb-6">M3rchandi53</Text>
-        <Text variant="lead" className="mb-8">
-          Take home a piece of EDSU House.
-        </Text>
+    <div className="min-h-screen bg-[#6EBDAF]">
+      <Container size="full" className="py-8">
+        <Text variant="heading" className="text-[#EB008B] text-4xl mb-8">M3rchandi53</Text>
 
         {/* Merchandise Grid */}
-        <Grid cols={{ base: 2, md: 3, lg: 4 }} className="gap-6">
+        <Grid cols={{ base: 4, md: 3, lg: 6 }} className="gap-6">
           {products.length > 0 ? (
             products.map((product) => (
               <Card key={product._id} className="overflow-hidden hover:shadow-lg transition-shadow">
@@ -102,9 +99,6 @@ export default async function MerchandisePage() {
                 <div className="p-4">
                   <Text variant="heading" className="text-lg mb-2">
                     {product.name || 'Unnamed Product'}
-                  </Text>
-                  <Text variant="body">
-                    Rp {(product.price || 0).toLocaleString('id-ID')}
                   </Text>
                 </div>
               </Card>

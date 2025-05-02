@@ -97,10 +97,33 @@ export default function BeEmPage() {
         const ongoingProgramIds = programsData
           .filter((p: Program) => p.status === 'ongoing')
           .map((p: Program) => p._id)
+        
+        const now = new Date()
+        const upcomingProgramIds = programsData
+          .filter((p: any) =>
+            p.isPublic &&
+            p.status === 'scheduled' &&
+            new Date(p.startDate) > now
+          )
+          .sort((a: any, b: any) => 
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+          )
+        
+        const nearestUpcoming = upcomingProgramIds.length > 0 ? upcomingProgramIds[0] : null
+          
 
-        const filteredBooks = booksData.filter((book: Book) => 
-          book.relatedPrograms.some(id => ongoingProgramIds.includes(id))
-        )
+        const filteredBooks = booksData.filter((book: Book) => {
+          if (ongoingProgramIds.length > 0) {
+            return (
+              book.relatedPrograms.some(id => ongoingProgramIds.includes(id))
+            );
+          } else if (ongoingProgramIds.length === 0) {
+            return (
+              book.relatedPrograms.includes(nearestUpcoming._id)
+            );
+          }
+          return false
+        })
 
         // Extract all reviews from books
         const reviews = filteredBooks.flatMap((book: Book) => 
@@ -182,8 +205,8 @@ export default function BeEmPage() {
                   <Text variant="body" className="text-sm text-gray-600">
                     {book.author} ({book.year})
                   </Text>
-                  <Text variant="body" className="text-sm font-medium text-[#85BAAC] mt-2">
-                    Rp {book.price.toLocaleString()}
+                  <Text variant="body" className="text-sm font-medium text-[#6EBDAF] mt-2">
+                    {book.description.length > 100 ? book.description.substring(0, 100) + '...' : book.description}
                   </Text>
                 </div>
               </Card>
@@ -197,7 +220,7 @@ export default function BeEmPage() {
             <Text variant="heading" className="text-2xl font-bold mb-8">Book Reviews</Text>
             <div className="relative">
               {/* Timeline Line */}
-              <div className="absolute h-1 bg-[#85BAAC]/20 w-full top-1/2 -translate-y-1/2" />
+              <div className="absolute h-1 bg-[#6EBDAF]/20 w-full top-1/2 -translate-y-1/2" />
               
               {/* Navigation Buttons */}
               {allReviews.length > 1 && (

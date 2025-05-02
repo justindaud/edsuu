@@ -4,6 +4,8 @@ import { Container, Grid, Text } from '../../../../shared/components/ui'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ImageSlider } from '../../../../shared/components/ImageSlider'
+import { UIMedia } from '../../../../shared/components/UIMedia'
+import { UIMediaLocationId } from '../../../../shared/config/uiMediaLocations'
 
 export default function TokobukuPage() {
   return (
@@ -12,9 +14,10 @@ export default function TokobukuPage() {
         {/* Be Em Section */}
         <Link href="/public/tokobuku/be-em" className="relative group overflow-hidden">
           <div className="absolute inset-0">
-            <ImageSlider 
-              images={['/placeholder/be-em.jpg']} 
-              className="transform transition-transform duration-700 scale-100 group-hover:scale-110"
+            <UIMedia 
+              locationId="tokobuku.be-em"
+              className="transform transition-transform duration-700 scale-100 group-hover:scale-110 w-full h-full object-cover"
+              alt="Be Em"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
           </div>
@@ -31,9 +34,10 @@ export default function TokobukuPage() {
         {/* Party Literasi Section */}
         <Link href="/public/tokobuku/party-literasi" className="relative group overflow-hidden">
           <div className="absolute inset-0">
-            <ImageSlider 
-              images={['/placeholder/party-literasi.jpg']} 
-              className="transform transition-transform duration-700 scale-100 group-hover:scale-110"
+            <UIMedia 
+              locationId="tokobuku.party-literasi"
+              className="transform transition-transform duration-700 scale-100 group-hover:scale-110 w-full h-full object-cover"
+              alt="Party Literasi"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
           </div>

@@ -115,7 +115,10 @@ export default function MediaTBYTPage() {
     try {
       const response = await fetch(`/api/media-tbyt/${selectedMedia._id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.user.accessToken}`
+        },
         body: JSON.stringify({
           title: formData.title,
           description: formData.description
@@ -139,6 +142,9 @@ export default function MediaTBYTPage() {
     try {
       const response = await fetch(`/api/media-tbyt/${id}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${session?.user.accessToken}`
+        }
       })
 
       if (!response.ok) throw new Error('Delete failed')
